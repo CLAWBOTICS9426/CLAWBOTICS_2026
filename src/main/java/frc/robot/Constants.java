@@ -4,12 +4,18 @@
 
 package frc.robot;
 
+<<<<<<< HEAD
 import java.util.HashMap;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Vision;
+=======
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
+>>>>>>> template/master
 import frc.robot.util.Elastic.Notification;
 import frc.robot.util.Elastic.Notification.NotificationLevel;
 
@@ -144,6 +150,7 @@ public final class Constants {
 		public static final int driverControllerPort = 1;
 		public static final int operatorControllerPort = 0;
 	}
+<<<<<<< HEAD
 
 
     /** A set of constants relating to vision. */
@@ -185,3 +192,6 @@ public final class Constants {
     }
 
 }
+=======
+}
+>>>>>>> template/master
