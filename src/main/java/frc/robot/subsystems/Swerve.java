@@ -16,10 +16,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
-<<<<<<< HEAD
-import frc.robot.Constants.VisionConstants;
-=======
->>>>>>> template/master
 import frc.robot.util.ControllerInput;
 import frc.robot.util.ControllerInput.VisionStatus;
 import frc.robot.util.SwerveModule;
@@ -30,10 +26,6 @@ import frc.robot.util.SwerveModule;
 public class Swerve extends SubsystemBase {
     private final ControllerInput controllerInput;
 
-<<<<<<< HEAD
-    private final Vision visionSystem; 
-=======
->>>>>>> template/master
     public final AHRS gyroAhrs;
 
     private final SwerveModule[] swerveModules = new SwerveModule[4];
@@ -50,8 +42,8 @@ public class Swerve extends SubsystemBase {
         DriveConstants.turnP, DriveConstants.turnI, DriveConstants.turnD, DriveConstants.turnR);
 
     private final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(
-        DriveConstants.frontLeft, DriveConstants.frontRight,
-        DriveConstants.backLeft, DriveConstants.backRight
+        DriveConstants.frontLeft,
+        DriveConstants.backLeft, DriveConstants.backRight, DriveConstants.frontRight
     );
 
     private double startTime = Timer.getTimestamp();
@@ -62,18 +54,10 @@ public class Swerve extends SubsystemBase {
      * @param controller - the controller object that will be used to control the drive system
      * @param visionSystem - the vision system that will be used to control the drivetrain
      */
-<<<<<<< HEAD
-    public Swerve(ControllerInput controller, Vision visionSystem) {
-
-        // assign constructor variables
-        this.controllerInput = controller;
-        this.visionSystem = visionSystem;
-=======
     public Swerve(ControllerInput controller) {
 
         // assign constructor variables
         this.controllerInput = controller;
->>>>>>> template/master
 
         // pose of the swerve is initialized to real values in Auto when auto routine is run
         this.currentPose = new Pose2d();
@@ -111,6 +95,10 @@ public class Swerve extends SubsystemBase {
 
         field.setRobotPose(currentPose);
 
+        // clean one liner B)
+        //for (SwerveModule swerveModule : swerveModules) swerveModule.printModuleStatus();
+
+    
         if (!DriverStation.isAutonomousEnabled()) swerveDrive(getDriveSpeeds());
     }
      
@@ -128,44 +116,14 @@ public class Swerve extends SubsystemBase {
             controllerInput.setTurnTarget(gyroAhrs.getRotation2d().getRadians());
         }
 
-<<<<<<< HEAD
-        switch (status) {
-            case LEFT_POSITION: // lines the robot up with the tag
-                speeds = visionSystem.getTagDrive(VisionConstants.cameraPair, VisionConstants.tagIDs, Vision.Side.LEFT, VisionConstants.leftOffset);
-                break;
-            case RIGHT_POSITION: // lines the robot up with the tag
-                speeds = visionSystem.getTagDrive(VisionConstants.cameraPair, VisionConstants.tagIDs, Vision.Side.FRONT, VisionConstants.rightOffset);
-                break;
-            case STRAIGHT_POSITION: // lines the robot up with the tag
-                speeds = visionSystem.getTagDrive(VisionConstants.cameraPair, VisionConstants.tagIDs, Vision.Side.FRONT, VisionConstants.straightOffset);
-                break;
-            case LOCKON: // allows the robot to move freely by user input but remains facing the tag
-                // TODO: lock on with both cameras
-                ChassisSpeeds controllerSpeeds = controllerInput.controllerChassisSpeeds(
-                    turnPID, gyroAhrs.getRotation2d());
-                ChassisSpeeds lockonSpeeds = visionSystem.lockonTagSpeeds(0, null);
-                speeds = new ChassisSpeeds(
-                    controllerSpeeds.vxMetersPerSecond,
-                    controllerSpeeds.vyMetersPerSecond,
-                    lockonSpeeds.omegaRadiansPerSecond
-                );
-                break;
-=======
         // you can parse through different controller inputs here and build
         // ChassisSpeeds objects to perform different actions (with vision)
         switch (status) {
->>>>>>> template/master
             default: // if all else fails - revert to drive controls
                 speeds = controllerInput.controllerChassisSpeeds(turnPID, gyroAhrs.getRotation2d());
                 break;
         }
 
-<<<<<<< HEAD
-        // this should never execute, but for our peace of mind
-        if (speeds == null) speeds = controllerInput.controllerChassisSpeeds(turnPID, gyroAhrs.getRotation2d());
-
-=======
->>>>>>> template/master
         return speeds;
     }
 

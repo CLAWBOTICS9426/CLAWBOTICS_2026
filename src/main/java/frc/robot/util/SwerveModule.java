@@ -82,7 +82,7 @@ public class SwerveModule extends SubsystemBase {
 
         // configure the swerve motor
         swerveConfig
-            .inverted(true)
+            .inverted(false)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(15);
 
@@ -104,7 +104,7 @@ public class SwerveModule extends SubsystemBase {
 
         // configure the drive motor
         driveConfig
-            .inverted(true)
+            .inverted(false)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(30);
 
