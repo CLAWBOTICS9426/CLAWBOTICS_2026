@@ -131,7 +131,17 @@ public final class Constants {
             "ABSOLUTE ENCODER NOT CONNECTED ON ONE OR MORE MODULES",
             "The absolute encoder for a swerve module is not connected! Please check the debugging tab to see which one."
         );
+            
+                
 
+
+
+    }
+    //PWM ports for intake motors
+    
+    public static class IntakeMotorPorts  {
+            public static final int intakePort = 0;
+            
     }
 
 	public static class OperatorConstants {
