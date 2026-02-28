@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.util.ControllerInput;
 import frc.robot.util.ControllerInput.VisionStatus;
@@ -46,7 +47,11 @@ public class Swerve extends SubsystemBase {
         DriveConstants.backLeft, DriveConstants.backRight, DriveConstants.frontRight
     );
 
+    public Vision visionSystem;
+
     private double startTime = Timer.getTimestamp();
+
+    CommandXboxController controller = new CommandXboxController(0);
 
     /**
      * Constructs a swerve subsystem with the given controller and vision systems.
@@ -90,10 +95,28 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic() {
-        currentPose = poseEstimator.updateWithTime(
-            startTime - Timer.getTimestamp(), gyroAhrs.getRotation2d(), getSwerveModulePositions());
+        if (controller.getLeftTriggerAxis() > 0.5 && visionSystem.hasTag()==true) {
+            double desiredRadius = 1.5; //meters from tag
+            double distanceError = visionSystem.getZ() - desiredRadius;
 
-        field.setRobotPose(currentPose);
+            currentPose = poseEstimator.updateWithTime(
+                startTime - Timer.getTimestamp(), gyroAhrs.getRotation2d(), getSwerveModulePositions());
+
+            field.setRobotPose(currentPose);
+
+            visionSystem.forward = -distanceError * 1.2; //maintains radius
+            visionSystem.strafe = 0.7; //constant sideways motion
+            visionSystem.rotate = -visionSystem.getYaw() * 0.02; //face the tag
+
+            ChassisSpeeds visionSpeeds =
+                new ChassisSpeeds(
+                    visionSystem.forward,
+                    visionSystem.strafe,
+                    visionSystem.rotate
+            );
+
+            if (!DriverStation.isAutonomousEnabled()) swerveDrive(visionSpeeds);
+        }
 
         // clean one liner B)
         //for (SwerveModule swerveModule : swerveModules) swerveModule.printModuleStatus();
