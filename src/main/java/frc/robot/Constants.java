@@ -144,6 +144,11 @@ public final class Constants {
             
     }
 
+    public static class TransferMotorPorts {
+        public static final int feederPort = 0;
+        public static final int hopperPort = 1;
+    }
+
 	public static class OperatorConstants {
 		public static final int driverControllerPort = 1;
 		public static final int operatorControllerPort = 0;

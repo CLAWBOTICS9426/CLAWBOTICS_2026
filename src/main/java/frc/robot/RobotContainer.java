@@ -13,7 +13,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.IntakeControl;
+import frc.robot.commands.TransferControl;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Transfer;
 import frc.robot.util.Auto;
 import frc.robot.util.ControllerInput;
 
@@ -29,16 +33,21 @@ import frc.robot.util.ControllerInput;
 public class RobotContainer {
 
 	CommandJoystick joystick = new CommandJoystick(OperatorConstants.operatorControllerPort);
-	CommandXboxController xboxController = new CommandXboxController(OperatorConstants.driverControllerPort);
+	CommandXboxController gamepad = new CommandXboxController(OperatorConstants.driverControllerPort);
 
 	PowerDistribution powerDistribution = new PowerDistribution(16, ModuleType.kRev);
 
-	ControllerInput controller = new ControllerInput(xboxController, joystick);
+	ControllerInput controller = new ControllerInput(gamepad, joystick);
 
 	Swerve swerve = new Swerve(controller);
 
 	final AutoChooser autoChooser;
     Auto auto = new Auto(swerve);
+	Intake intake;
+	IntakeControl intakeControl;
+
+	Transfer transfer;
+	TransferControl transferControl;
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -61,6 +70,12 @@ public class RobotContainer {
 
         SmartDashboard.putData("Power Distribution", powerDistribution);
 
+		intake = new Intake();
+		intakeControl = new IntakeControl(intake);
+
+		transfer = new Transfer();
+		transferControl = new TransferControl(transfer);
+
 		// Configure the trigger bindings
 		configureBindings();
 	}
@@ -82,27 +97,39 @@ public class RobotContainer {
 	private void configureBindings() {
 
 		// driver bindings 
-        xboxController.start()
+        gamepad.start()
             .onChange(controller.toggleNos);
 
-        xboxController.leftTrigger(0.75)
+        gamepad.leftTrigger(0.75)
             .onChange(controller.toggleFeildRelative);
 
-        xboxController.rightBumper()
-            .onTrue(controller.upShift);
+        // gamepad.rightBumper()
+        //     .onTrue(controller.upShift);
         
-        xboxController.leftBumper()
-            .onTrue(controller.downShift);
+        // gamepad.leftBumper()
+        //     .onTrue(controller.downShift);
 
-        xboxController.b()
-            .onChange(controller.toggleRightBumper);
+        // gamepad.b()
+        //     .onChange(controller.toggleRightBumper);
         
-        xboxController.x()
-            .onChange(controller.toggleLeftBumper);
+        // gamepad.x()
+        //     .onChange(controller.toggleLeftBumper);
         
-        xboxController.a()
-            .onChange(controller.a);
+        // gamepad.a()
+        //     .onChange(controller.a);
 
+		gamepad.x()
+			.onTrue(intakeControl.slurp)
+			.onFalse(intakeControl.stop);
+		gamepad.a()
+			.onTrue(intakeControl.yuck)
+			.onFalse(intakeControl.stop);
+		gamepad.y()
+			.onTrue(transferControl.powerFeeder)
+			.onFalse(transferControl.stopFeeder);
+		gamepad.b()
+			.onTrue(transferControl.powerHopper)
+			.onFalse(transferControl.stopHopper);
 	}
 
 	/**
