@@ -149,8 +149,15 @@ public final class Constants {
         public static final int hopperPort = 1;
     }
 
+    public static class ShooterMotorPorts {
+        public static final int highMotorPort = 0;
+        public static final int lowMotorPort = 1;
+    }
+
 	public static class OperatorConstants {
 		public static final int driverControllerPort = 1;
 		public static final int operatorControllerPort = 0;
 	}
+
+
 }
