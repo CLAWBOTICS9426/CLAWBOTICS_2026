@@ -140,18 +140,18 @@ public final class Constants {
     //PWM ports for intake motors
     
     public static class IntakeMotorPorts  {
-            public static final int intakePort = 0;
+            public static final int intakePort = 9;
             
     }
 
     public static class TransferMotorPorts {
-        public static final int feederPort = 0;
-        public static final int hopperPort = 1;
+        public static final int feederPort = 29;
+        public static final int hopperPort = 28;
     }
 
     public static class ShooterMotorPorts {
-        public static final int highMotorPort = 0;
-        public static final int lowMotorPort = 1;
+        public static final int highMotorPort = 27;
+        public static final int lowMotorPort = 26;
     }
 
 	public static class OperatorConstants {

@@ -91,6 +91,8 @@ public class Swerve extends SubsystemBase {
         );
 
         turnPID.enableContinuousInput(-Math.PI, Math.PI);
+
+        this.visionSystem = new Vision();
     }
 
     @Override
@@ -98,15 +100,11 @@ public class Swerve extends SubsystemBase {
         if (controller.getLeftTriggerAxis() > 0.5 && visionSystem.hasTag()==true) {
             double desiredRadius = 1.5; //meters from tag
             double distanceError = visionSystem.getZ() - desiredRadius;
-
-            currentPose = poseEstimator.updateWithTime(
-                startTime - Timer.getTimestamp(), gyroAhrs.getRotation2d(), getSwerveModulePositions());
-
-            field.setRobotPose(currentPose);
+            double distanceStrafe = visionSystem.getX();
 
             visionSystem.forward = -distanceError * 1.2; //maintains radius
-            visionSystem.strafe = 0.7; //constant sideways motion
-            visionSystem.rotate = -visionSystem.getYaw() * 0.02; //face the tag
+            visionSystem.strafe = distanceStrafe * -35; //constant sideways motion
+            visionSystem.rotate = -visionSystem.getYaw() * 0; //face the tag
 
             ChassisSpeeds visionSpeeds =
                 new ChassisSpeeds(
@@ -116,13 +114,21 @@ public class Swerve extends SubsystemBase {
             );
 
             if (!DriverStation.isAutonomousEnabled()) swerveDrive(visionSpeeds);
+        } else {
+            if (!DriverStation.isAutonomousEnabled()) swerveDrive(getDriveSpeeds());
         }
+
+        currentPose = poseEstimator.updateWithTime(
+            startTime - Timer.getTimestamp(), gyroAhrs.getRotation2d(), getSwerveModulePositions());
+
+        field.setRobotPose(currentPose);
+
 
         // clean one liner B)
         //for (SwerveModule swerveModule : swerveModules) swerveModule.printModuleStatus();
 
     
-        if (!DriverStation.isAutonomousEnabled()) swerveDrive(getDriveSpeeds());
+        //
     }
      
     /**
