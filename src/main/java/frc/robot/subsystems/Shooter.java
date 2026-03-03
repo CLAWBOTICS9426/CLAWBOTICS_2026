@@ -6,7 +6,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase{
     private static SparkMax highShootMotor;
@@ -17,14 +17,14 @@ public class Shooter extends SubsystemBase{
 
 
     public Shooter () {
-        highShootMotor = new SparkMax(Constants.ShooterMotorPorts.highMotorPort, MotorType.kBrushless);
+        highShootMotor = new SparkMax(ShooterConstants.highMotorPort, MotorType.kBrushless);
         highMotorConfig = new SparkMaxConfig();
         highMotorConfig
             .inverted(false)  // Change if needed
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(15);
 
-        lowShootMotor = new SparkMax(Constants.ShooterMotorPorts.lowMotorPort, MotorType.kBrushless);
+        lowShootMotor = new SparkMax(ShooterConstants.lowMotorPort, MotorType.kBrushless);
         lowMotorConfig = new SparkMaxConfig();
         lowMotorConfig
             .inverted(false) // Change if needed

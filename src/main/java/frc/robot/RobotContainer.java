@@ -20,6 +20,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Transfer;
 import frc.robot.util.Auto;
 import frc.robot.util.ControllerInput;
+import frc.robot.util.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -39,7 +40,9 @@ public class RobotContainer {
 
 	ControllerInput controller = new ControllerInput(gamepad, joystick);
 
-	Swerve swerve = new Swerve(controller);
+    Vision visionSystem = new Vision();
+
+	Swerve swerve = new Swerve(controller, visionSystem);
 
 	final AutoChooser autoChooser;
     Auto auto = new Auto(swerve);

@@ -32,7 +32,6 @@ public class ControllerInput extends SubsystemBase {
     private boolean fieldRelative = true;
     private boolean leftBumper;
     private boolean rightBumper;
-    private boolean coral = false;
 
     private VisionStatus visionStatus;
 
@@ -69,12 +68,8 @@ public class ControllerInput extends SubsystemBase {
 
         slider = (joystick.getRawAxis(3) + 1) / 2;
         
-        if (leftBumper && rightBumper) visionStatus = VisionStatus.LOCKON;
+        if (controller.getLeftTriggerAxis() > 0.5) visionStatus = VisionStatus.LOCKON;
         else visionStatus = VisionStatus.NONE;
-
-        // rightBumper && leftBumper) visionStatus = VisionStatus.STRAIGHT_POSITION;
-        // else if (rightBumper) visionStatus = VisionStatus.RIGHT_POSITION;
-        // else if (leftBumper) visionStatus = VisionStatus.LEFT_POSITION;
     }
 
     public void setTurnTarget(double target) {
@@ -140,14 +135,6 @@ public class ControllerInput extends SubsystemBase {
 
     public Command toggleLeftBumper = Commands.runOnce(() -> {
         leftBumper = !leftBumper;
-    });
-
-    public Command toggleLockOn = Commands.runOnce(() -> {
-        // lockOn = !lockOn;
-    });
-
-    public Command a = Commands.runOnce(() -> {
-        coral = !coral;
     });
 
 

@@ -8,7 +8,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.TransferConstants;
 
 public class Transfer extends SubsystemBase {
     private static SparkMax feederMotor;
@@ -18,7 +18,7 @@ public class Transfer extends SubsystemBase {
     private static SparkMaxConfig hopperConfig;
 
     public Transfer () {
-        feederMotor = new SparkMax(Constants.TransferMotorPorts.feederPort, SparkLowLevel.MotorType.kBrushless);
+        feederMotor = new SparkMax(TransferConstants.feederPort, SparkLowLevel.MotorType.kBrushless);
         feederConfig = new SparkMaxConfig();
         feederConfig
             .inverted(false) // Adjust if necessary
@@ -26,7 +26,7 @@ public class Transfer extends SubsystemBase {
             .smartCurrentLimit(15);
         feederMotor.configure(feederConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        hopperMotor = new SparkMax(Constants.TransferMotorPorts.hopperPort, SparkLowLevel.MotorType.kBrushless);
+        hopperMotor = new SparkMax(TransferConstants.hopperPort, SparkLowLevel.MotorType.kBrushless);
         hopperConfig = new SparkMaxConfig();
         hopperConfig
             .inverted(false) // Adjust if necessary

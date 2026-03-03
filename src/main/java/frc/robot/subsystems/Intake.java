@@ -8,7 +8,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.IntakeConstants;
 
 
 
@@ -17,7 +17,7 @@ public class Intake extends SubsystemBase  {
    private final SparkMaxConfig config;
 
    public Intake () {
-      intakeMotor = new SparkMax(Constants.IntakeMotorPorts.intakePort, SparkLowLevel.MotorType.kBrushless);
+      intakeMotor = new SparkMax(IntakeConstants.intakePort, SparkLowLevel.MotorType.kBrushless);
       config = new SparkMaxConfig();
       config.inverted(false) // Adjust if necessary
          .idleMode(IdleMode.kCoast)

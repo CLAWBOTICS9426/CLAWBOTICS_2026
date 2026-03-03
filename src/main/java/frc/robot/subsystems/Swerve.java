@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import choreo.trajectory.SwerveSample;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
+
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,10 +18,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.LimelightHelpers;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.util.ControllerInput;
 import frc.robot.util.ControllerInput.VisionStatus;
 import frc.robot.util.SwerveModule;
+import frc.robot.util.Vision;
 
 /**
  * The physical subsystem that controls the drivetrain.
@@ -51,15 +55,13 @@ public class Swerve extends SubsystemBase {
 
     private double startTime = Timer.getTimestamp();
 
-    CommandXboxController controller = new CommandXboxController(0);
-
     /**
      * Constructs a swerve subsystem with the given controller and vision systems.
 
      * @param controller - the controller object that will be used to control the drive system
      * @param visionSystem - the vision system that will be used to control the drivetrain
      */
-    public Swerve(ControllerInput controller) {
+    public Swerve(ControllerInput controller, Vision visionSystem) {
 
         // assign constructor variables
         this.controllerInput = controller;
@@ -92,45 +94,20 @@ public class Swerve extends SubsystemBase {
 
         turnPID.enableContinuousInput(-Math.PI, Math.PI);
 
-        this.visionSystem = new Vision();
+        this.visionSystem = visionSystem; 
     }
 
     @Override
     public void periodic() {
-        if (controller.getLeftTriggerAxis() > 0.5 && visionSystem.hasTag()==true) {
-            double desiredRadius = 1.5; //meters from tag
-            double distanceError = visionSystem.getZ() - desiredRadius;
-            double distanceStrafe = visionSystem.getX();
+        
+        updateOdometry();
 
-            visionSystem.forward = -distanceError * 1.2; //maintains radius
-            visionSystem.strafe = distanceStrafe * -35; //constant sideways motion
-            visionSystem.rotate = -visionSystem.getYaw() * 0; //face the tag
-
-            ChassisSpeeds visionSpeeds =
-                new ChassisSpeeds(
-                    visionSystem.forward,
-                    visionSystem.strafe,
-                    visionSystem.rotate
-            );
-
-            if (!DriverStation.isAutonomousEnabled()) swerveDrive(visionSpeeds);
-        } else {
-            if (!DriverStation.isAutonomousEnabled()) swerveDrive(getDriveSpeeds());
-        }
-
-        currentPose = poseEstimator.updateWithTime(
-            startTime - Timer.getTimestamp(), gyroAhrs.getRotation2d(), getSwerveModulePositions());
-
-        field.setRobotPose(currentPose);
-
+        if (!DriverStation.isAutonomousEnabled()) swerveDrive(getDriveSpeeds());
 
         // clean one liner B)
         //for (SwerveModule swerveModule : swerveModules) swerveModule.printModuleStatus();
-
-    
-        //
     }
-     
+    
     /**
      * Depending on the vision status, returns either chassis speeds based on controller inputs, or vision tag drive
      * 
@@ -148,6 +125,11 @@ public class Swerve extends SubsystemBase {
         // you can parse through different controller inputs here and build
         // ChassisSpeeds objects to perform different actions (with vision)
         switch (status) {
+            case LOCKON:
+                if (LimelightHelpers.getTargetCount("")!=0) {
+                    speeds = visionSystem.approachTag();
+                    break; // only break if we have tags to use
+                }
             default: // if all else fails - revert to drive controls
                 speeds = controllerInput.controllerChassisSpeeds(turnPID, gyroAhrs.getRotation2d());
                 break;
@@ -201,7 +183,61 @@ public class Swerve extends SubsystemBase {
         return swerveModulePositions;
     }
 
+    public void updateOdometry() {
+        currentPose = poseEstimator.updateWithTime(
+            startTime - Timer.getTimestamp(), gyroAhrs.getRotation2d(), getSwerveModulePositions());
 
+        // most of this is pulled from the docs
+        // it *should* perform pose estimation
+
+        boolean useMegaTag2 = true; // set to false to use MegaTag1
+        boolean doRejectUpdate = false;
+
+        if (useMegaTag2 == false) {
+            LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+
+            if (mt1.tagCount == 1 && mt1.rawFiducials.length == 1) {
+                if (mt1.rawFiducials[0].ambiguity > .7) {
+                    doRejectUpdate = true;
+                }
+                if (mt1.rawFiducials[0].distToCamera > 3) {
+                    doRejectUpdate = true;
+                }
+            }
+            if (mt1.tagCount == 0) {
+                doRejectUpdate = true;
+            }
+
+            if (!doRejectUpdate) {
+                poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
+                poseEstimator.addVisionMeasurement(
+                        mt1.pose,
+                        mt1.timestampSeconds);
+            }
+        } else if (useMegaTag2 == true) {
+            LimelightHelpers.SetRobotOrientation("limelight",
+                    poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+            LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+            if (Math.abs(gyroAhrs.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second,
+                                                  // ignore vision updates
+            {
+                doRejectUpdate = true;
+            }
+            if (mt2.tagCount == 0) {
+                doRejectUpdate = true;
+            }
+            if (!doRejectUpdate) {
+                poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
+                poseEstimator.addVisionMeasurement(
+                        mt2.pose,
+                        mt2.timestampSeconds);
+            }
+        }
+
+        field.setRobotPose(currentPose);
+
+    }
+ 
     private void setupModules() {
         System.out.println("Setting up swerve modules");
 
