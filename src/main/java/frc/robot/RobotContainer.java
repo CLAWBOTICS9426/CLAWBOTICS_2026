@@ -13,9 +13,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.IntakeControl;
+import frc.robot.commands.ShooterControl;
 import frc.robot.commands.TransferControl;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Transfer;
 import frc.robot.util.Auto;
@@ -52,6 +55,9 @@ public class RobotContainer {
 	Transfer transfer;
 	TransferControl transferControl;
 
+	Shooter shooter;
+	ShooterControl shooterControl;
+
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
@@ -78,6 +84,9 @@ public class RobotContainer {
 
 		transfer = new Transfer();
 		transferControl = new TransferControl(transfer);
+
+		shooter = new Shooter();
+		shooterControl = new ShooterControl(shooter);
 
 		// Configure the trigger bindings
 		configureBindings();
@@ -127,12 +136,19 @@ public class RobotContainer {
 		gamepad.a()
 			.onTrue(intakeControl.yuck)
 			.onFalse(intakeControl.stop);
-		gamepad.y()
-			.onTrue(transferControl.powerFeeder)
-			.onFalse(transferControl.stopFeeder);
 		gamepad.b()
 			.onTrue(transferControl.powerHopper)
 			.onFalse(transferControl.stopHopper);
+
+		gamepad.y()
+			.onTrue(shooterControl.accelerateMotors)
+			.onFalse(shooterControl.stopMotors);
+
+		gamepad.leftBumper()
+			.onTrue(shooterControl.decreaseMotorSpeed);
+
+		gamepad.rightBumper()
+			.onTrue(shooterControl.increaseMotorSpeed);
 	}
 
 	/**

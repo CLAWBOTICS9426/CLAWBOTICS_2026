@@ -143,13 +143,12 @@ public final class Constants {
     }
 
     public static class TransferConstants {
-        public static final int feederPort = 29;
-        public static final int hopperPort = 28;
+        public static final int hopperPort = 10;
     }
 
     public static class ShooterConstants {
-        public static final int highMotorPort = 27;
-        public static final int lowMotorPort = 26;
+        public static final int highMotorPort = 12;
+        public static final int lowMotorPort = 11;
     }
 
 	public static class OperatorConstants {

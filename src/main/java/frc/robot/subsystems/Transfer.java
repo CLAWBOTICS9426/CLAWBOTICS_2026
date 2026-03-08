@@ -11,25 +11,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TransferConstants;
 
 public class Transfer extends SubsystemBase {
-    private static SparkMax feederMotor;
-    private static SparkMaxConfig feederConfig;
 
     private static SparkMax hopperMotor;
     private static SparkMaxConfig hopperConfig;
 
     public Transfer () {
-        feederMotor = new SparkMax(TransferConstants.feederPort, SparkLowLevel.MotorType.kBrushless);
-        feederConfig = new SparkMaxConfig();
-        feederConfig
-            .inverted(false) // Adjust if necessary
-            .idleMode(IdleMode.kCoast)
-            .smartCurrentLimit(15);
-        feederMotor.configure(feederConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         hopperMotor = new SparkMax(TransferConstants.hopperPort, SparkLowLevel.MotorType.kBrushless);
         hopperConfig = new SparkMaxConfig();
         hopperConfig
-            .inverted(false) // Adjust if necessary
+            .inverted(true) // Adjust if necessary
             .idleMode(IdleMode.kCoast)
             .smartCurrentLimit(15);    
         hopperMotor.configure(hopperConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -37,13 +28,6 @@ public class Transfer extends SubsystemBase {
 
     }
 
-    public void powerFeeder (double power) {
-        feederMotor.set(power);
-    }
-
-    public void powerFeeder () {
-        feederMotor.set(1);
-    }
 
     public void powerHopper (double power) {
         hopperMotor.set(power);
@@ -51,10 +35,6 @@ public class Transfer extends SubsystemBase {
 
     public void powerHopper () {
         hopperMotor.set(1);
-    }
-
-    public void stopFeeder () {
-        feederMotor.set(0);
     }
 
     public void stopHopper () {

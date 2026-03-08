@@ -12,14 +12,6 @@ public class TransferControl extends Command{
         addRequirements(transfer);
     }
 
-    public Command powerFeeder = Commands.runOnce(() -> {
-        transfer.powerFeeder(1);
-    });
-
-    public Command stopFeeder = Commands.runOnce(() -> {
-        transfer.stopFeeder();
-    });
-
     public Command powerHopper = Commands.runOnce(() -> {
         transfer.powerHopper(1);
     });
