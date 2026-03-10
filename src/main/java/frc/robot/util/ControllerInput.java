@@ -142,5 +142,6 @@ public class ControllerInput extends SubsystemBase {
     public double throttle() {return throttle;}
     public VisionStatus visionStatus() {return visionStatus;}
 
+    public double getX() {return x;}
     public double slider() {return slider;}
 }

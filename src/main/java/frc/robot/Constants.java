@@ -114,7 +114,7 @@ public final class Constants {
 
 
         public static final double highDriveSpeed = 5.18;
-        public static final double speedModifier = 0.35;
+        public static final double speedModifier = 1.0;
 
         public static final double inchesPerRotation = Math.PI * 3.875;
         public static final double metersPerRotation = Units.inchesToMeters(inchesPerRotation);

@@ -1,8 +1,10 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.LimelightHelpers;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.LimelightHelpers.LimelightResults;
 
 public class Vision {
 
@@ -19,15 +21,16 @@ public class Vision {
     }
 
 
-    public ChassisSpeeds approachTag() {
+    public ChassisSpeeds approachTag(PIDController turnPID, ControllerInput controllerInput) {
 
         double desiredRadius = 1.5; //meters from tag
         double distanceError = LimelightHelpers.getTA("") - desiredRadius;
-        double distanceStrafe = LimelightHelpers.getTX("");
+        double distanceRotate = LimelightHelpers.getTX("");
 
-        double forward = -distanceError * 1.2; //maintains radius
-        double strafe = distanceStrafe * -35; //constant sideways motion
-        double rotate = 0; //DONT face the tag
+        double forward = 0; //maintains radius
+        double strafe = controllerInput.getX() * 3; //constant sideways motion
+        double rotate = turnPID.calculate(0, distanceRotate * -0.02); //constant sideways motion
+        ; //DONT face the tag
 
         ChassisSpeeds visionSpeeds =
             new ChassisSpeeds(
