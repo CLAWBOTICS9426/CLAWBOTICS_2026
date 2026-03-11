@@ -45,11 +45,14 @@ public class Swerve extends SubsystemBase {
         DriveConstants.xyP, DriveConstants.xyI, DriveConstants.xyD);
     private final PIDController turnPID = new PIDController(
         DriveConstants.turnP, DriveConstants.turnI, DriveConstants.turnD, DriveConstants.turnR);
+    private final PIDController lockOnPID = new PIDController(
+        DriveConstants.lockOnP, DriveConstants.lockOnI, DriveConstants.lockOnD, DriveConstants.lockOnR);    
 
     private final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(
         DriveConstants.frontLeft,
         DriveConstants.backLeft, DriveConstants.backRight, DriveConstants.frontRight
     );
+    
 
     public Vision visionSystem;
 
@@ -127,7 +130,7 @@ public class Swerve extends SubsystemBase {
         switch (status) {
             case LOCKON:
                 //if (LimelightHelpers.getTargetCount("")!=0) {
-                    speeds = visionSystem.approachTag(turnPID, controllerInput);
+                    speeds = visionSystem.approachTag(lockOnPID, controllerInput);
                     break; // only break if we have tags to use
                 //}
             default: // if all else fails - revert to drive controls
