@@ -39,7 +39,7 @@ public class RobotContainer {
 	CommandJoystick joystick = new CommandJoystick(OperatorConstants.operatorControllerPort);
 	CommandXboxController gamepad = new CommandXboxController(OperatorConstants.driverControllerPort);
 
-	PowerDistribution powerDistribution = new PowerDistribution(16, ModuleType.kRev);
+	PowerDistribution powerDistribution = new PowerDistribution(20, ModuleType.kRev);
 
 	ControllerInput controller = new ControllerInput(gamepad, joystick);
 
