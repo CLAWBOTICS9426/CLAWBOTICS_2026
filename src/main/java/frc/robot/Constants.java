@@ -105,6 +105,12 @@ public final class Constants {
         public static final double driveKv = 2.35;
         public static final double driveKa = 0.44;
 
+        public static final double lockOnP = 0.2;
+        public static final double lockOnI = 0.0;
+        public static final double lockOnD = 0.00024;
+        public static final double lockOnR = 0.02;
+    
+
         public static final SimpleMotorFeedforward[] driveFeedForward = {
             new SimpleMotorFeedforward(driveKs, driveKv, driveKa),
             new SimpleMotorFeedforward(driveKs, driveKv, driveKa),
@@ -157,7 +163,6 @@ public final class Constants {
 	}
 
     public static class VisionConstants {
-
         public static final double desiredRadius = 1.5; // in meters
     }
 

@@ -21,7 +21,7 @@ public class Vision {
     }
 
 
-    public ChassisSpeeds approachTag(PIDController turnPID, ControllerInput controllerInput) {
+    public ChassisSpeeds approachTag(PIDController lockOnPID, ControllerInput controllerInput) {
 
         double desiredRadius = 1.5; //meters from tag
         double distanceError = LimelightHelpers.getTA("") - desiredRadius;
@@ -29,7 +29,9 @@ public class Vision {
 
         double forward = 0; //maintains radius
         double strafe = controllerInput.getX() * 3; //constant sideways motion
-        double rotate = turnPID.calculate(distanceRotate * 0.02, 0); //constant sideways motion
+        double rotate = lockOnPID.calculate(distanceRotate, 0); //constant sideways motion
+
+        rotate -= (strafe*0.5);
         ; //DONT face the tag
 
         ChassisSpeeds visionSpeeds =
