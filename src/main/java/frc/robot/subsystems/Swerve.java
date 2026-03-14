@@ -130,7 +130,8 @@ public class Swerve extends SubsystemBase {
                     speeds = visionSystem.approachTag(turnPID, controllerInput);
                     break; // only break if we have tags to use
                 //}
-            default: // if all else fails - revert to drive controls
+
+                default: // if all else fails - revert to drive controls
                 speeds = controllerInput.controllerChassisSpeeds(turnPID, gyroAhrs.getRotation2d());
                 break;
         }

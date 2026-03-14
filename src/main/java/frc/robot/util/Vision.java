@@ -29,7 +29,7 @@ public class Vision {
 
         double forward = 0; //maintains radius
         double strafe = controllerInput.getX() * 3; //constant sideways motion
-        double rotate = turnPID.calculate(0, distanceRotate * -0.02); //constant sideways motion
+        double rotate = turnPID.calculate(distanceRotate * 0.02, 0); //constant sideways motion
         ; //DONT face the tag
 
         ChassisSpeeds visionSpeeds =
