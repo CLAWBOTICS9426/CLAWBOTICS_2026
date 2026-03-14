@@ -31,6 +31,24 @@ public class Auto {
             swerve
         );
     }
+    
+    public AutoRoutine hallTest() {
+        DataLogManager.log("Starting Auto Routine: hallTest");
+
+        AutoRoutine hallTest = autoFactory.newRoutine("hallTest");
+
+        AutoTrajectory hallwayTest = hallTest.trajectory("hallwayTest");
+
+
+        hallTest.active().onTrue(
+            Commands.sequence(
+                hallwayTest.resetOdometry(),
+                hallwayTest.cmd()
+            )
+        );
+
+        return hallTest;
+    }
 
     public AutoRoutine fromLeft() {
         DataLogManager.log("Starting Auto Routine: fromLeft");

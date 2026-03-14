@@ -68,10 +68,11 @@ public class RobotContainer {
         autoChooser.addRoutine("FromLeft", auto::fromLeft);
         autoChooser.addRoutine("FromMid", auto::fromMid);
         autoChooser.addRoutine("FromRight", auto::fromRight);
+        autoChooser.addRoutine("HallTest", auto::hallTest);
 
         SmartDashboard.putData("Autos", autoChooser);
 
-        autoChooser.select("FromMid");
+        autoChooser.select("HallTest");
 
         SmartDashboard.putData("Swerve", swerve);
         SmartDashboard.putData("Field", swerve.field);
