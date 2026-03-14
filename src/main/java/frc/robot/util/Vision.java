@@ -31,7 +31,7 @@ public class Vision {
         double strafe = controllerInput.getX() * 3; //constant sideways motion
         double rotate = lockOnPID.calculate(distanceRotate, 0); //constant sideways motion
 
-        rotate -= (strafe*0.7);
+        rotate -= (strafe*0.5);
         ; //DONT face the tag
 
         ChassisSpeeds visionSpeeds =

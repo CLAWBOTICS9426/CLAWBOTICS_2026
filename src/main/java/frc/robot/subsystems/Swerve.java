@@ -129,10 +129,10 @@ public class Swerve extends SubsystemBase {
         // ChassisSpeeds objects to perform different actions (with vision)
         switch (status) {
             case LOCKON:
-                //if (LimelightHelpers.getTargetCount("")!=0) {
+                if (LimelightHelpers.getTargetCount("limelight")> 0) {
                     speeds = visionSystem.approachTag(lockOnPID, controllerInput);
                     break; // only break if we have tags to use
-                //}
+                }
             default: // if all else fails - revert to drive controls
                 speeds = controllerInput.controllerChassisSpeeds(turnPID, gyroAhrs.getRotation2d());
                 break;
