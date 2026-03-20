@@ -6,8 +6,11 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import edu.wpi.first.math.controller.PIDController;
+
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase{
@@ -17,7 +20,10 @@ public class Shooter extends SubsystemBase{
     private static SparkMax lowShootMotor;
     private static SparkMaxConfig lowMotorConfig;
 
-    private double speedChanger = 0.6;
+    private static PIDController shooterPid = new PIDController(ShooterConstants.shooterP, ShooterConstants.shooterI, ShooterConstants.shooterD);
+
+    private static double highRpmAdjust = 0.0;
+    private static double lowRpmAdjust = 0.0;
 
 
     public Shooter () {
@@ -39,9 +45,10 @@ public class Shooter extends SubsystemBase{
         lowShootMotor.configure(lowMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    public void accelerateMotors (double highPower, double lowPower) { // TODO: Change this to work with Velocity PIDF, not power
-        highShootMotor.set(highPower * speedChanger);
-        lowShootMotor.set(lowPower * speedChanger);
+    public void accelerateMotors (double highRpm, double lowRpm) {
+        highShootMotor.set(shooterPid.calculate(getHighMotorVelocity(), highRpm + highRpmAdjust));
+        lowShootMotor.set(shooterPid.calculate(getLowMotorVelocity(), lowRpm + lowRpmAdjust));
+
     }
 
     public void stop () {
@@ -58,8 +65,12 @@ public class Shooter extends SubsystemBase{
         return lowShootMotor.getEncoder().getVelocity();
     }
 
-    public void adjustSpeed (double adjustmentValueRPM) {
-        speedChanger += adjustmentValueRPM;
+    public void adjustHighMotorSpeed (double adjustmentValueRPM) {
+        highRpmAdjust += adjustmentValueRPM;
+    }
+
+    public void adjustLowMotorSpeed (double adjustmentValueRPM) {
+        lowRpmAdjust += adjustmentValueRPM;
     }
     
 }

@@ -18,27 +18,39 @@ public class ShooterControl extends Command{
     }
 
     public double[] calculateMotorPower (double distance) {
-        double baseRPM = 6*distance + 7; // Adjust Equation based on Regression
-        double motorRatio = 6*distance + 7; // Adjust Equation based on Regression
+        double highRpm = 6*distance + 7; // Adjust Equation based on Regression
+        double lowRpm = 6*distance + 7; // Adjust Equation based on Regression
         
-        double[] results = {baseRPM, baseRPM*motorRatio};
+        double[] results = {highRpm, lowRpm};
         return new double[]{1, 1};
     }
 
-    public Command accelerateMotors = Commands.runOnce(() -> {
+    public Command accelerateMotorsCalculated = Commands.runOnce(() -> {
         shooter.accelerateMotors(calculateMotorPower(distanceFromTarget)[0], calculateMotorPower(distanceFromTarget)[1]);
     });
 
+    public Command accelerateMotorsHardValues = Commands.runOnce(() -> {
+        shooter.accelerateMotors(2000, 2000);
+    });
+
     public Command stopMotors = Commands.runOnce(() -> {
-        shooter.accelerateMotors(0, 0);
+        shooter.stop();
     });
 
-    public Command decreaseMotorSpeed = Commands.runOnce(() -> {
-        shooter.adjustSpeed(-0.05);
+    public Command decreaseHighMotorSpeed = Commands.runOnce(() -> {
+        shooter.adjustHighMotorSpeed(10);
     });
 
-    public Command increaseMotorSpeed = Commands.runOnce(() -> {
-        shooter.adjustSpeed(0.05);
+    public Command increaseHighMotorSpeed = Commands.runOnce(() -> {
+        shooter.adjustLowMotorSpeed(-10);
+    });
+
+    public Command decreaseLowMotorSpeed = Commands.runOnce(() -> {
+        shooter.adjustHighMotorSpeed(10);
+    });
+
+    public Command increaseLowMotorSpeed = Commands.runOnce(() -> {
+        shooter.adjustLowMotorSpeed(-10);
     });
 
 }

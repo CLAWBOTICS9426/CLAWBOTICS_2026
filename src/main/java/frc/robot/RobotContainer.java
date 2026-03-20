@@ -113,9 +113,6 @@ public class RobotContainer {
         gamepad.start()
             .onChange(controller.toggleNos);
 
-        gamepad.leftTrigger(0.75)
-            .onChange(controller.toggleFeildRelative);
-
         // gamepad.rightBumper()
         //     .onTrue(controller.upShift);
         
@@ -142,14 +139,20 @@ public class RobotContainer {
 			.onFalse(transferControl.stopHopper);
 
 		gamepad.y()
-			.onTrue(shooterControl.accelerateMotors)
+			.onTrue(shooterControl.accelerateMotorsHardValues)
 			.onFalse(shooterControl.stopMotors);
 
 		gamepad.leftBumper()
-			.onTrue(shooterControl.decreaseMotorSpeed);
+			.onTrue(shooterControl.decreaseLowMotorSpeed);
 
 		gamepad.rightBumper()
-			.onTrue(shooterControl.increaseMotorSpeed);
+			.onTrue(shooterControl.increaseLowMotorSpeed);
+
+		gamepad.leftTrigger()
+			.onTrue(shooterControl.increaseHighMotorSpeed);
+
+		gamepad.rightTrigger()
+			.onTrue(shooterControl.decreaseHighMotorSpeed);
 	}
 
 	/**

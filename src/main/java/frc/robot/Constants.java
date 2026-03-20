@@ -155,6 +155,11 @@ public final class Constants {
     public static class ShooterConstants {
         public static final int highMotorPort = 12;
         public static final int lowMotorPort = 11;
+
+        public static final double shooterP = 0.002;
+        public static final double shooterI = 0.0;
+        public static final double shooterD = 0.0003;
+        public static final double shooterF = 0.001;
     }
 
 	public static class OperatorConstants {
