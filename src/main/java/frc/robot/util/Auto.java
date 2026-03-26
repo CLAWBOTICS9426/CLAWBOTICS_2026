@@ -33,7 +33,7 @@ public class Auto {
     }
     
     public AutoRoutine hallTest() {
-        DataLogManager.log("Starting Auto Routine: hallTest");
+        DataLogManager.log("Starting A9uto Routine: hallTest");
 
         AutoRoutine hallTest = autoFactory.newRoutine("hallTest");
 

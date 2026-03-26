@@ -41,9 +41,15 @@ public class ControllerInput extends SubsystemBase {
     // the angle the robot should try to face
     private double turnTarget = 0;
   
-    public ControllerInput(CommandXboxController controller, CommandJoystick joystick) {
+    /*public ControllerInput(CommandXboxController controller, CommandJoystick joystick) {
         this.controller = controller;
         this.joystick = joystick;
+        this.visionStatus = VisionStatus.NONE;
+    }*/
+
+    public ControllerInput(CommandXboxController controller, CommandXboxController controller2) {
+        this.controller = controller;
+        this.controller = controller2;
         this.visionStatus = VisionStatus.NONE;
     }
 

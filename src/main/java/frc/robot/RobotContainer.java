@@ -36,12 +36,12 @@ import frc.robot.util.Vision;
  */
 public class RobotContainer {
 
-	CommandJoystick joystick = new CommandJoystick(OperatorConstants.operatorControllerPort);
+	CommandXboxController gamepad2 = new CommandXboxController(OperatorConstants.operatorControllerPort);
 	CommandXboxController gamepad = new CommandXboxController(OperatorConstants.driverControllerPort);
 
 	PowerDistribution powerDistribution = new PowerDistribution(20, ModuleType.kRev);
 
-	ControllerInput controller = new ControllerInput(gamepad, joystick);
+	ControllerInput controller = new ControllerInput(gamepad, gamepad2);
 
     Vision visionSystem = new Vision();
 
@@ -128,30 +128,30 @@ public class RobotContainer {
         // gamepad.a()
         //     .onChange(controller.a);
 
-		gamepad.x()
+		gamepad2.x()
 			.onTrue(intakeControl.slurp)
 			.onFalse(intakeControl.stop);
-		gamepad.a()
+		gamepad2.a()
 			.onTrue(intakeControl.yuck)
 			.onFalse(intakeControl.stop);
-		gamepad.b()
+		gamepad2.b()
 			.onTrue(transferControl.powerHopper)
 			.onFalse(transferControl.stopHopper);
 
-		gamepad.y()
+		gamepad2.y()
 			.onTrue(shooterControl.accelerateMotorsHardValues)
 			.onFalse(shooterControl.stopMotors);
 
-		gamepad.leftBumper()
+		gamepad2.leftBumper()
 			.onTrue(shooterControl.decreaseLowMotorSpeed);
 
-		gamepad.rightBumper()
+		gamepad2.rightBumper()
 			.onTrue(shooterControl.increaseLowMotorSpeed);
 
-		gamepad.leftTrigger()
+		gamepad2.leftTrigger()
 			.onTrue(shooterControl.increaseHighMotorSpeed);
 
-		gamepad.rightTrigger()
+		gamepad2.rightTrigger()
 			.onTrue(shooterControl.decreaseHighMotorSpeed);
 	}
 

@@ -162,6 +162,10 @@ public final class Constants {
         public static final double shooterF = 0.001;
     }
 
+    public static class FeederConstants {
+        public static final int feederPort = 13;
+    }
+
 	public static class OperatorConstants {
 		public static final int driverControllerPort = 1;
 		public static final int operatorControllerPort = 0;
