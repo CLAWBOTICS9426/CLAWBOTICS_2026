@@ -15,12 +15,16 @@ public class IntakeControl extends Command {
     public Command slurp = Commands.runOnce(() -> {
         intake.intake();
     });
-    
+
     public Command yuck = Commands.runOnce(() -> {
         intake.backSpin(1);
     });
 
     public Command stop = Commands.runOnce(() -> {
         intake.stop();
+    });
+
+    public Command slurpAuto = Commands.runOnce(() -> {
+        slurp.andThen(Commands.waitSeconds(5).andThen(stop));
     });
 }
