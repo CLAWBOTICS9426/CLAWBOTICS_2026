@@ -32,7 +32,6 @@ public class Vision {
         double rotate = lockOnPID.calculate(distanceRotate, 0); //constant sideways motion
 
         rotate -= (strafe*0.5);
-        ; //DONT face the tag
 
         ChassisSpeeds visionSpeeds =
             new ChassisSpeeds(

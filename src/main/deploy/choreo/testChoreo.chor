@@ -9,22 +9,22 @@
  "config":{
   "frontLeft":{
    "x":{
-    "exp":"13 in",
-    "val":0.3302
+    "exp":"13.5 in",
+    "val":0.3429
    },
    "y":{
-    "exp":"7 in",
-    "val":0.1778
+    "exp":"8 in",
+    "val":0.2032
    }
   },
   "backLeft":{
    "x":{
-    "exp":"-13 in",
-    "val":-0.3302
+    "exp":"-13.5 in",
+    "val":-0.3429
    },
    "y":{
-    "exp":"7 in",
-    "val":0.1778
+    "exp":"8 in",
+    "val":0.2032
    }
   },
   "mass":{
