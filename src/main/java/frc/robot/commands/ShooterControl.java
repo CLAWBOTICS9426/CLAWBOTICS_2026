@@ -8,6 +8,8 @@ public class ShooterControl extends Command{
     private Shooter shooter;
     public double distanceFromTarget;
 
+    private boolean toggle = false;
+
     public ShooterControl (Shooter shooter) {
         this.shooter = shooter;
         addRequirements(shooter);
@@ -35,6 +37,11 @@ public class ShooterControl extends Command{
 
     public Command stopMotors = Commands.runOnce(() -> {
         shooter.stop();
+    });
+
+    public Command toggleMotors = Commands.runOnce(() -> {
+        shooter.accelerateMotors(toggle ? 2000 : 0, toggle ? 2000 : 0);
+        toggle = !toggle;
     });
 
     public Command decreaseHighMotorSpeed = Commands.runOnce(() -> {

@@ -12,18 +12,22 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.IntakeControl;
 import frc.robot.commands.ShooterControl;
 import frc.robot.commands.TransferControl;
+import frc.robot.commands.HopperControl;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Transfer;
+import frc.robot.subsystems.Hopper;
 import frc.robot.util.Auto;
 import frc.robot.util.ControllerInput;
 import frc.robot.util.Vision;
+import frc.robot.Constants;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -57,6 +61,9 @@ public class RobotContainer {
 
 	Shooter shooter;
 	ShooterControl shooterControl;
+
+	Hopper hopper;
+	HopperControl hopperControl;
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -113,45 +120,34 @@ public class RobotContainer {
         gamepad.start()
             .onChange(controller.toggleNos);
 
-        // gamepad.rightBumper()
-        //     .onTrue(controller.upShift);
-        
-        // gamepad.leftBumper()
-        //     .onTrue(controller.downShift);
+		gamepad.rightBumper() 
+			.onTrue(controller.downShift)
+			.onFalse(controller.upShift);
 
-        // gamepad.b()
-        //     .onChange(controller.toggleRightBumper);
-        
-        // gamepad.x()
-        //     .onChange(controller.toggleLeftBumper);
-        
-        // gamepad.a()
-        //     .onChange(controller.a);
-
-		gamepad2.x()
+		gamepad2.a()
 			.onTrue(intakeControl.slurp)
 			.onFalse(intakeControl.stop);
-		gamepad2.a()
+		gamepad2.b()
 			.onTrue(intakeControl.burp)
 			.onFalse(intakeControl.stop);
-		gamepad2.b()
-			.onTrue(transferControl.powerHopper)
-			.onFalse(transferControl.stopHopper);
 
-		gamepad2.y()
-			.onTrue(shooterControl.accelerateMotorsHardValues)
-			.onFalse(shooterControl.stopMotors);
-
-		gamepad2.leftBumper()
-			.onTrue(shooterControl.decreaseLowMotorSpeed);
+		gamepad2.x()
+			.onTrue(hopperControl.ToggleHopper);
 
 		gamepad2.rightBumper()
+			.onTrue(transferControl.toggleBelt)
+			.onTrue(shooterControl.toggleMotors);
+		
+		gamepad2.povLeft()
+			.onTrue(shooterControl.decreaseLowMotorSpeed);
+
+		gamepad2.povRight()
 			.onTrue(shooterControl.increaseLowMotorSpeed);
 
-		gamepad2.leftTrigger()
+		gamepad2.povUp()
 			.onTrue(shooterControl.increaseHighMotorSpeed);
 
-		gamepad2.rightTrigger()
+		gamepad2.povDown()
 			.onTrue(shooterControl.decreaseHighMotorSpeed);
 	}
 

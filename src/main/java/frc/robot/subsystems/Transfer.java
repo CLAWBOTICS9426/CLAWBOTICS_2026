@@ -12,32 +12,32 @@ import frc.robot.Constants.TransferConstants;
 
 public class Transfer extends SubsystemBase {
 
-    private static SparkMax hopperMotor;
-    private static SparkMaxConfig hopperConfig;
+    private static SparkMax beltMotor;
+    private static SparkMaxConfig beltConfig;
 
     public Transfer () {
 
-        hopperMotor = new SparkMax(TransferConstants.hopperPort, SparkLowLevel.MotorType.kBrushless);
-        hopperConfig = new SparkMaxConfig();
-        hopperConfig
+        beltMotor = new SparkMax(TransferConstants.beltPort, SparkLowLevel.MotorType.kBrushless);
+        beltConfig = new SparkMaxConfig();
+        beltConfig
             .inverted(true) // Adjust if necessary
             .idleMode(IdleMode.kCoast)
             .smartCurrentLimit(15);    
-        hopperMotor.configure(hopperConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        beltMotor.configure(beltConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 
     }
 
 
-    public void powerHopper (double power) {
-        hopperMotor.set(power);
+    public void powerBelt (double power) {
+        beltMotor.set(power);
     }
 
-    public void powerHopper () {
-        hopperMotor.set(1);
+    public void powerBelt () {
+        beltMotor.set(1);
     }
 
-    public void stopHopper () {
-        hopperMotor.set(0);
+    public void stopBelt () {
+        beltMotor.set(0);
     }
 }

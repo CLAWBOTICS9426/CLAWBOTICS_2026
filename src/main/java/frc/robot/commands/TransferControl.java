@@ -6,17 +6,24 @@ import frc.robot.subsystems.Transfer;
 
 public class TransferControl extends Command{
     private Transfer transfer;
+
+    private boolean toggle = false;
     
     public TransferControl (Transfer transfer) {
         this.transfer = transfer;
         addRequirements(transfer);
     }
 
-    public Command powerHopper = Commands.runOnce(() -> {
-        transfer.powerHopper(1);
+    public Command powerBelt = Commands.runOnce(() -> {
+        transfer.powerBelt(1);
     });
 
-    public Command stopHopper = Commands.runOnce(() -> {
-        transfer.stopHopper();
+    public Command stopBelt = Commands.runOnce(() -> {
+        transfer.stopBelt();
+    });
+
+    public Command toggleBelt = Commands.runOnce(() -> {
+        transfer.powerBelt(toggle ? 1 : 0);
+        toggle = !toggle;
     });
 }

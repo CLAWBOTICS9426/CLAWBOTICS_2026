@@ -149,7 +149,7 @@ public final class Constants {
     }
 
     public static class TransferConstants {
-        public static final int hopperPort = 10;
+        public static final int beltPort = 10;
     }
 
     public static class ShooterConstants {
@@ -160,6 +160,10 @@ public final class Constants {
         public static final double shooterI = 0.0;
         public static final double shooterD = 0.0003;
         public static final double shooterF = 0.001;
+    }
+
+    public static class HopperConstants {
+        public static int hopperMotorPort = 13;
     }
 
     public static class FeederConstants {
