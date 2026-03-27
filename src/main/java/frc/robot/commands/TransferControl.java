@@ -18,6 +18,10 @@ public class TransferControl extends Command{
         transfer.powerBelt(1);
     });
 
+    public Command negativeBelt = Commands.runOnce(() -> {
+        transfer.powerBelt(-1);
+    });
+
     public Command stopBelt = Commands.runOnce(() -> {
         transfer.stopBelt();
     });
@@ -26,4 +30,12 @@ public class TransferControl extends Command{
         transfer.powerBelt(toggle ? 1 : 0);
         toggle = !toggle;
     });
+
+    public Command OscilateBelt =
+        Commands.repeatingSequence(
+            powerBelt
+                .andThen(Commands.waitSeconds(0.25)
+                .andThen(negativeBelt)
+                .andThen(Commands.waitSeconds(0.25))
+        ));
 }

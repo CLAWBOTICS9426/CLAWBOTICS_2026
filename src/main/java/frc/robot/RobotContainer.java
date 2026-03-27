@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -133,6 +134,10 @@ public class RobotContainer {
 
 		gamepad2.x()
 			.onTrue(hopperControl.ToggleHopper);
+
+		gamepad.y()
+			.onTrue(hopperControl.OscilateHopper.withTimeout(2))
+			.onTrue(transferControl.OscilateBelt.withTimeout(2));
 
 		gamepad2.rightBumper()
 			.onTrue(transferControl.toggleBelt)

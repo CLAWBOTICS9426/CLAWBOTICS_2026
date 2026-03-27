@@ -40,4 +40,5 @@ public class Transfer extends SubsystemBase {
     public void stopBelt () {
         beltMotor.set(0);
     }
+
 }
