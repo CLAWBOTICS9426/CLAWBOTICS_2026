@@ -132,7 +132,7 @@ public class RobotContainer {
 			.onTrue(intakeControl.slurp)
 			.onFalse(intakeControl.stop);
 		gamepad2.a()
-			.onTrue(intakeControl.yuck)
+			.onTrue(intakeControl.burp)
 			.onFalse(intakeControl.stop);
 		gamepad2.b()
 			.onTrue(transferControl.powerHopper)

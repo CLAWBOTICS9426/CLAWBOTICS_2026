@@ -16,7 +16,7 @@ public class IntakeControl extends Command {
         intake.intake();
     });
 
-    public Command yuck = Commands.runOnce(() -> {
+    public Command burp = Commands.runOnce(() -> {
         intake.backSpin(1);
     });
 
