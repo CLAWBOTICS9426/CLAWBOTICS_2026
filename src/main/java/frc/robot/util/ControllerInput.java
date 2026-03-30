@@ -36,7 +36,7 @@ public class ControllerInput extends SubsystemBase {
     private VisionStatus visionStatus;
 
     private CommandXboxController controller;
-    private CommandJoystick joystick;
+    private CommandXboxController controller2;
 
     // the angle the robot should try to face
     private double turnTarget = 0;
@@ -49,7 +49,7 @@ public class ControllerInput extends SubsystemBase {
 
     public ControllerInput(CommandXboxController controller, CommandXboxController controller2) {
         this.controller = controller;
-        this.controller = controller2;
+        this.controller2 = controller2;
         this.visionStatus = VisionStatus.NONE;
     }
 
@@ -71,8 +71,6 @@ public class ControllerInput extends SubsystemBase {
         if (Math.abs(theta) < 0.05) {
             theta = 0;
         }
-
-        slider = (joystick.getRawAxis(3) + 1) / 2;
         
         if (controller.getLeftTriggerAxis() > 0.5) visionStatus = VisionStatus.LOCKON;
         else visionStatus = VisionStatus.NONE;

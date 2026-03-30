@@ -28,7 +28,8 @@ public class ShooterControl extends Command{
     }
 
     public Command accelerateMotorsCalculated = Commands.runOnce(() -> {
-        shooter.accelerateMotors(calculateMotorPower(distanceFromTarget)[0], calculateMotorPower(distanceFromTarget)[1]);
+        double[] speeds = calculateMotorPower(distanceFromTarget);
+        shooter.accelerateMotors(speeds[0], speeds[1]);
     });
 
     public Command accelerateMotorsHardValues = Commands.runOnce(() -> {
@@ -40,24 +41,24 @@ public class ShooterControl extends Command{
     });
 
     public Command toggleMotors = Commands.runOnce(() -> {
-        shooter.accelerateMotors(toggle ? 2000 : 0, toggle ? 2000 : 0);
         toggle = !toggle;
+        shooter.accelerateMotors(toggle ? 2000 : 0, toggle ? 2000 : 0);
     });
 
     public Command decreaseHighMotorSpeed = Commands.runOnce(() -> {
-        shooter.adjustHighMotorSpeed(10);
+        shooter.adjustHighMotorSpeed(1000);
     });
 
     public Command increaseHighMotorSpeed = Commands.runOnce(() -> {
-        shooter.adjustLowMotorSpeed(-10);
+        shooter.adjustLowMotorSpeed(-1000);
     });
 
     public Command decreaseLowMotorSpeed = Commands.runOnce(() -> {
-        shooter.adjustHighMotorSpeed(10);
+        shooter.adjustHighMotorSpeed(1000);
     });
 
     public Command increaseLowMotorSpeed = Commands.runOnce(() -> {
-        shooter.adjustLowMotorSpeed(-10);
+        shooter.adjustLowMotorSpeed(-1000);
     });
 
 }

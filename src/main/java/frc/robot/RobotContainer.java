@@ -97,6 +97,8 @@ public class RobotContainer {
 		shooter = new Shooter();
 		shooterControl = new ShooterControl(shooter);
 
+		hopper = new Hopper();
+		hopperControl = new HopperControl(hopper);
 		// Configure the trigger bindings
 		configureBindings();
 	}
@@ -121,7 +123,7 @@ public class RobotContainer {
         gamepad.start()
             .onChange(controller.toggleNos);
 
-		gamepad.rightBumper() 
+		gamepad.rightTrigger() 
 			.onTrue(controller.downShift)
 			.onFalse(controller.upShift);
 
@@ -133,15 +135,21 @@ public class RobotContainer {
 			.onFalse(intakeControl.stop);
 
 		gamepad2.x()
-			.onTrue(hopperControl.ToggleHopper);
+			.onTrue(hopperControl.powerHopper)
+			.onFalse(hopperControl.stopHopper);
 
-		gamepad.y()
-			.onTrue(hopperControl.OscilateHopper.withTimeout(2))
-			.onTrue(transferControl.OscilateBelt.withTimeout(2));
+		gamepad2.y()
+			.onTrue(hopperControl.negativeHopper)
+			.onFalse(hopperControl.stopHopper);
+
+		// manipulator bindings
+		gamepad2.rightTrigger()
+			.onTrue(shooterControl.accelerateMotorsHardValues)
+			.onFalse(shooterControl.stopMotors);
 
 		gamepad2.rightBumper()
-			.onTrue(transferControl.toggleBelt)
-			.onTrue(shooterControl.toggleMotors);
+			.onTrue(transferControl.toggleBelt);
+
 		
 		gamepad2.povLeft()
 			.onTrue(shooterControl.decreaseLowMotorSpeed);
@@ -154,6 +162,7 @@ public class RobotContainer {
 
 		gamepad2.povDown()
 			.onTrue(shooterControl.decreaseHighMotorSpeed);
+
 	}
 
 	/**

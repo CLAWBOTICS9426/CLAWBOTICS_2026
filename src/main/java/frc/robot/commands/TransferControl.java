@@ -15,11 +15,11 @@ public class TransferControl extends Command{
     }
 
     public Command powerBelt = Commands.runOnce(() -> {
-        transfer.powerBelt(1);
+        transfer.powerBelt(0.25);
     });
 
     public Command negativeBelt = Commands.runOnce(() -> {
-        transfer.powerBelt(-1);
+        transfer.powerBelt(-0.25);
     });
 
     public Command stopBelt = Commands.runOnce(() -> {
@@ -27,8 +27,8 @@ public class TransferControl extends Command{
     });
 
     public Command toggleBelt = Commands.runOnce(() -> {
-        transfer.powerBelt(toggle ? 1 : 0);
         toggle = !toggle;
+        transfer.powerBelt(toggle ? 1 : 0);
     });
 
     public Command OscilateBelt =
@@ -37,5 +37,5 @@ public class TransferControl extends Command{
                 .andThen(Commands.waitSeconds(0.25)
                 .andThen(negativeBelt)
                 .andThen(Commands.waitSeconds(0.25))
-        ));
+        )).withTimeout(2.0);
 }

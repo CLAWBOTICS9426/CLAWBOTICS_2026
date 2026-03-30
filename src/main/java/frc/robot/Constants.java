@@ -65,10 +65,10 @@ public final class Constants {
         };
 
         public static final double[] absoluteOffsets = {
-            100.6,
-            78.7,
-            218.6,
-            255.9
+            38.67, //67
+            76.5,
+            281.67, //67
+            259.3
         };
 
         public static final double inchesFromRobotCenterWidth = 13.5;
@@ -156,14 +156,20 @@ public final class Constants {
         public static final int highMotorPort = 12;
         public static final int lowMotorPort = 11;
 
-        public static final double shooterP = 0.002;
+        public static final double shooterP = 0.0004;
         public static final double shooterI = 0.0;
-        public static final double shooterD = 0.0003;
-        public static final double shooterF = 0.001;
+        public static final double shooterD = 0.0000;
+        public static final double shooterF = 0.000;
+
+        public static final double shooterMaxAccel = 2500;
+
+        public static final double neoFreeSpeedRPM = 5676.0;
     }
 
     public static class HopperConstants {
         public static int hopperMotorPort = 13;
+
+        public static double hopperSpeed = 1;
     }
 
     public static class FeederConstants {

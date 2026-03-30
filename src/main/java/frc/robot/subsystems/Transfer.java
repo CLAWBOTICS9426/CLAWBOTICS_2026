@@ -20,7 +20,7 @@ public class Transfer extends SubsystemBase {
         beltMotor = new SparkMax(TransferConstants.beltPort, SparkLowLevel.MotorType.kBrushless);
         beltConfig = new SparkMaxConfig();
         beltConfig
-            .inverted(true) // Adjust if necessary
+            .inverted(false) // Adjust if necessary
             .idleMode(IdleMode.kCoast)
             .smartCurrentLimit(15);    
         beltMotor.configure(beltConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
