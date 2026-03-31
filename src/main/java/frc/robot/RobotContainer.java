@@ -138,23 +138,27 @@ public class RobotContainer {
 		gamepad2.b()
 			.onTrue(intakeControl.burp)
 			.onFalse(intakeControl.stop);
-
+			
 		gamepad2.y()
 			.onTrue(hopperControl.openHopper);
-			// .onTrue(hopperControl.powerHopper)
-			// .onFalse(hopperControl.stopHopper);
+			//.onTrue(hopperControl.powerHopper)
+			//.onFalse(hopperControl.stopHopper);
 
 		gamepad2.x()
 			.onTrue(hopperControl.closeHopper);
-			// .onTrue(hopperControl.negativeHopper)
-			// .onFalse(hopperControl.stopHopper);
+			//.onTrue(hopperControl.negativeHopper)
+			//.onFalse(hopperControl.stopHopper);
 
 		// manipulator bindings
 		gamepad2.rightTrigger()
 			.onTrue(shooterControl.accelerateMotorsHardValues)
 			.onFalse(shooterControl.stopMotors);
-		
+
 		gamepad2.leftTrigger()
+			.onTrue(shooterControl.accelerateMotorLimelight)
+			.onFalse(shooterControl.stopMotors);
+			
+		gamepad2.leftBumper()
 			.onTrue(transferControl.OscilateBelt);
 		// 	.onTrue(transferControl.powerBelt
 		// 		.andThen(Commands.waitSeconds(.5))

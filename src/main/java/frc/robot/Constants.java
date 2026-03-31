@@ -120,7 +120,7 @@ public final class Constants {
 
 
         public static final double highDriveSpeed = 5.9;
-        public static final double speedModifier = 1.0;
+        public static final double speedModifier = 2.0;
 
         public static final double inchesPerRotation = Math.PI * 3.875;
         public static final double metersPerRotation = Units.inchesToMeters(inchesPerRotation);
@@ -174,7 +174,7 @@ public final class Constants {
 
         public static double hopperSpeed = 0.5;
 
-        public static double extendedPos = 2.9;
+        public static double extendedPos = 2.1;
     }
 
     public static class FeederConstants {

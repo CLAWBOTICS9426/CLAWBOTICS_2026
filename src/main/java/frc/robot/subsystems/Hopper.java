@@ -40,7 +40,7 @@ public class Hopper extends SubsystemBase{
 
     public boolean isClosed() {
 
-        return hopperEncoder.getPosition() <= 0.05;
+        return hopperEncoder.getPosition() <= 0.1;
     }
 
     public boolean isOpen() {

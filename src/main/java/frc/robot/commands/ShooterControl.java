@@ -1,8 +1,13 @@
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterControl extends Command{
@@ -15,6 +20,41 @@ public class ShooterControl extends Command{
         this.shooter = shooter;
         addRequirements(shooter);
     }
+
+    
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("");
+    NetworkTableEntry tableTy = table.getEntry("ty");
+
+   
+
+    // distance from the center of the Limelight lens to the floor
+    double limelightLensHeightInches = 57.0; 
+
+    // distance from the target to the floor
+    double goalHeightInches = 60.0; 
+
+    double angleToGoalDegrees = tableTy.getDouble(0.0); //should add angle of limelight, but it is flat on wall
+    double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+
+    //calculate distance
+    public double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
+    public double distanceFromLimelightToGoalFeet = distanceFromLimelightToGoalInches/12;
+
+    public double distanceAdjusted () {
+        return angleToGoalDegrees;
+        /*if (distanceFromLimelightToGoalFeet != 0) {
+            return angleToGoalDegrees;
+            
+        } else {
+            return 0;
+            //System.out.println("distance 0");
+        }*/
+        
+    }
+    
+ 
+
+    double lowMotorSpeedAdjustment = /*200 */ distanceAdjusted(); //how much increases per foot
 
     public void setDistance (double distance) {
         distanceFromTarget = distance;
@@ -35,6 +75,11 @@ public class ShooterControl extends Command{
 
     public Command accelerateMotorsHardValues = Commands.runOnce(() -> {
         shooter.accelerateMotors(ShooterConstants.startingHighSpeed, ShooterConstants.startingLowSpeed  );
+    });
+
+    public Command accelerateMotorLimelight = Commands.runOnce(() -> {
+        System.out.println(distanceAdjusted());
+        shooter.accelerateMotors(800, 0 + lowMotorSpeedAdjustment);
     });
 
     public Command stopMotors = Commands.runOnce(() -> {
