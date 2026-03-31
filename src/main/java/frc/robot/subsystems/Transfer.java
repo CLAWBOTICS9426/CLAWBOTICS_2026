@@ -22,7 +22,8 @@ public class Transfer extends SubsystemBase {
         beltConfig
             .inverted(false) // Adjust if necessary
             .idleMode(IdleMode.kCoast)
-            .smartCurrentLimit(15);    
+            .smartCurrentLimit(30);    
+            
         beltMotor.configure(beltConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 

@@ -106,7 +106,7 @@ public class SwerveModule extends SubsystemBase {
         driveConfig
             .inverted(false)
             .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(30);
+            .smartCurrentLimit(35);
 
         driveConfig.encoder
             .positionConversionFactor(DriveConstants.driveMotorToWheel)

@@ -24,7 +24,7 @@ public class ControllerInput extends SubsystemBase {
 
     private double x, y, theta, slider;
 
-    private double throttle = 0.6;
+    private double throttle = 1;
 
     // enables / disables "full throttle" on the drive wheels
     private boolean nos;
@@ -126,7 +126,7 @@ public class ControllerInput extends SubsystemBase {
 
     public Command downShift = Commands.runOnce(() -> {
         if (throttle > 0)
-            throttle -= 0.2;
+            throttle -= 0.4;
     });
 
     public Command toggleFeildRelative = Commands.runOnce(() -> {

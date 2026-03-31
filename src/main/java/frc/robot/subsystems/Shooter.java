@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -108,6 +109,19 @@ public class Shooter extends SubsystemBase{
 
     public void adjustLowMotorSpeed (double adjustmentValueRPM) {
         lowRpmAdjust += adjustmentValueRPM;
+    }
+
+    public long[] getShooterSpeeds() {
+        return new long[]{ShooterConstants.startingHighSpeed + (int)highRpmAdjust, ShooterConstants.startingLowSpeed + (int)lowRpmAdjust};
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        
+        builder.setSmartDashboardType("Shooter Speeds");
+
+        builder.addIntegerArrayProperty("Shooter Speeds", this::getShooterSpeeds, null);
+
     }
     
 }

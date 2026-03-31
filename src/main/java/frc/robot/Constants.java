@@ -101,9 +101,9 @@ public final class Constants {
         public static final double turnD = 0.0016;
         public static final double turnR = 0.02;
 
-        public static final double driveKs = 0.065;
-        public static final double driveKv = 2.35;
-        public static final double driveKa = 0.44;
+        public static final double driveKs = 0.65;
+        public static final double driveKv = 3.11;
+        public static final double driveKa = 1.05;
 
         public static final double lockOnP = 0.2;
         public static final double lockOnI = 0.0;
@@ -158,18 +158,23 @@ public final class Constants {
 
         public static final double shooterP = 0.0004;
         public static final double shooterI = 0.0;
-        public static final double shooterD = 0.0000;
+        public static final double shooterD = 0.0128;
         public static final double shooterF = 0.000;
 
         public static final double shooterMaxAccel = 2500;
 
         public static final double neoFreeSpeedRPM = 5676.0;
+
+        public static final int startingHighSpeed = 800;
+        public static final int startingLowSpeed = 3000;
     }
 
     public static class HopperConstants {
         public static int hopperMotorPort = 13;
 
-        public static double hopperSpeed = 1;
+        public static double hopperSpeed = 0.5;
+
+        public static double extendedPos = 2.9;
     }
 
     public static class FeederConstants {
