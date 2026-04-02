@@ -98,16 +98,16 @@ public class ControllerInput extends SubsystemBase {
 
         if (fieldRelative) {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                -DriveConstants.speedModifier * y,
-                -DriveConstants.speedModifier * x,
+                -DriveConstants.highDriveSpeed * y,
+                -DriveConstants.highDriveSpeed * x,
                 turnSpeed,
                 currentAngle
             );
         } else {
             // If we are not in field relative mode, we are in robot relative mode
             chassisSpeeds = new ChassisSpeeds(
-                -DriveConstants.speedModifier * y,
-                -DriveConstants.speedModifier * x,
+                -DriveConstants.highDriveSpeed * y,
+                -DriveConstants.highDriveSpeed * x,
                 turnSpeed
             );
         }

@@ -21,40 +21,23 @@ public class ShooterControl extends Command{
         addRequirements(shooter);
     }
 
-    
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("");
-    NetworkTableEntry tableTy = table.getEntry("ty");
-
-   
-
     // distance from the center of the Limelight lens to the floor
-    double limelightLensHeightInches = 57.0; 
+    double limelightLensHeightInches = 22.5; 
 
     // distance from the target to the floor
-    double goalHeightInches = 60.0; 
+    double goalHeightInches = 52.0; 
 
-    double angleToGoalDegrees = tableTy.getDouble(0.0); //should add angle of limelight, but it is flat on wall
-    double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+    double angleToGoalDegrees; //should add angle of limelight, but it is flat on wall
+    double angleToGoalRadians;
 
     //calculate distance
-    public double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
-    public double distanceFromLimelightToGoalFeet = distanceFromLimelightToGoalInches/12;
+    public double distanceFromLimelightToGoalInches;
+    public double distanceFromLimelightToGoalFeet;
 
-    public double distanceAdjusted () {
-        return angleToGoalDegrees;
-        /*if (distanceFromLimelightToGoalFeet != 0) {
-            return angleToGoalDegrees;
-            
-        } else {
-            return 0;
-            //System.out.println("distance 0");
-        }*/
-        
-    }
-    
- 
+    double lowMotorSpeedAdjustment;
 
-    double lowMotorSpeedAdjustment = /*200 */ distanceAdjusted(); //how much increases per foot
+
+     //how much increases per foot
 
     public void setDistance (double distance) {
         distanceFromTarget = distance;
@@ -68,6 +51,8 @@ public class ShooterControl extends Command{
         return new double[]{1, 1};
     }
 
+
+
     public Command accelerateMotorsCalculated = Commands.runOnce(() -> {
         double[] speeds = calculateMotorPower(distanceFromTarget);
         shooter.accelerateMotors(speeds[0], speeds[1]);
@@ -77,9 +62,20 @@ public class ShooterControl extends Command{
         shooter.accelerateMotors(ShooterConstants.startingHighSpeed, ShooterConstants.startingLowSpeed  );
     });
 
-    public Command accelerateMotorLimelight = Commands.runOnce(() -> {
-        System.out.println(distanceAdjusted());
-        shooter.accelerateMotors(800, 0 + lowMotorSpeedAdjustment);
+    public Command accelerateMotorLimelight = Commands.run(() -> {
+
+        angleToGoalDegrees = LimelightHelpers.getTY("");
+        if (angleToGoalDegrees != 0) { 
+            angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
+            
+            distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
+            distanceFromLimelightToGoalFeet = distanceFromLimelightToGoalInches/12;
+
+            lowMotorSpeedAdjustment = 200 * (distanceFromLimelightToGoalFeet - 2);
+        }
+        System.out.println(distanceFromLimelightToGoalFeet);
+        shooter.accelerateMotors(800, (2900 + lowMotorSpeedAdjustment));
+        
     });
 
     public Command stopMotors = Commands.runOnce(() -> {

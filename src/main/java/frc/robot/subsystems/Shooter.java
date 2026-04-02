@@ -35,7 +35,7 @@ public class Shooter extends SubsystemBase{
         highMotorConfig = new SparkMaxConfig();
         highMotorConfig
             .inverted(false)  // Change if needed
-            .idleMode(IdleMode.kBrake)
+            .idleMode(IdleMode.kCoast)
             .smartCurrentLimit(35);
 
         highMotorConfig.closedLoop
@@ -50,7 +50,7 @@ public class Shooter extends SubsystemBase{
         lowMotorConfig = new SparkMaxConfig();
         lowMotorConfig
             .inverted(true) // Change if needed
-            .idleMode(IdleMode.kBrake)
+            .idleMode(IdleMode.kCoast)
             .smartCurrentLimit(35);
 
         lowMotorConfig.closedLoop

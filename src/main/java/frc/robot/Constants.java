@@ -101,7 +101,7 @@ public final class Constants {
         public static final double turnD = 0.0016;
         public static final double turnR = 0.02;
 
-        public static final double driveKs = 0.65;
+        public static final double driveKs = 0.065;
         public static final double driveKv = 3.11;
         public static final double driveKa = 1.05;
 
@@ -119,8 +119,9 @@ public final class Constants {
         };
 
 
-        public static final double highDriveSpeed = 5.9;
-        public static final double speedModifier = 2.0;
+        public static final double highDriveSpeedFeet = 12.5;
+        public static final double highDriveSpeed = Units.feetToMeters(highDriveSpeedFeet);
+        public static final double speedModifier = 0.5;
 
         public static final double inchesPerRotation = Math.PI * 3.875;
         public static final double metersPerRotation = Units.inchesToMeters(inchesPerRotation);
@@ -161,7 +162,7 @@ public final class Constants {
         public static final double shooterD = 0.0128;
         public static final double shooterF = 0.000;
 
-        public static final double shooterMaxAccel = 2500;
+        public static final double shooterMaxAccel = 3000;
 
         public static final double neoFreeSpeedRPM = 5676.0;
 
@@ -174,7 +175,7 @@ public final class Constants {
 
         public static double hopperSpeed = 0.5;
 
-        public static double extendedPos = 2.1;
+        public static double extendedPos = 1.8;
     }
 
     public static class FeederConstants {

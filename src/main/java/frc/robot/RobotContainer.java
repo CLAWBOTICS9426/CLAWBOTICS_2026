@@ -150,21 +150,21 @@ public class RobotContainer {
 			//.onFalse(hopperControl.stopHopper);
 
 		// manipulator bindings
-		gamepad2.rightTrigger()
-			.onTrue(shooterControl.accelerateMotorsHardValues)
+		gamepad2.leftTrigger()
+			.whileTrue(shooterControl.accelerateMotorsHardValues)
 			.onFalse(shooterControl.stopMotors);
 
-		gamepad2.leftTrigger()
-			.onTrue(shooterControl.accelerateMotorLimelight)
+		gamepad2.rightTrigger()
+			.whileTrue(shooterControl.accelerateMotorLimelight)
 			.onFalse(shooterControl.stopMotors);
 			
-		gamepad2.leftBumper()
+		gamepad2.rightBumper()
 			.onTrue(transferControl.OscilateBelt);
 		// 	.onTrue(transferControl.powerBelt
 		// 		.andThen(Commands.waitSeconds(.5))
 		// 		.andThen(transferControl.negativeBelt));	
 
-		gamepad2.rightBumper()
+		gamepad2.start()
 			.onTrue(transferControl.toggleBelt);
 
 		
