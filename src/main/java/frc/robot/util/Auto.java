@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.IntakeControl;
 import frc.robot.commands.ShooterControl;
+import frc.robot.commands.TransferControl;
 import frc.robot.subsystems.Swerve;
 
 
@@ -19,6 +20,8 @@ public class Auto {
 
     ShooterControl shooterControl;
 
+    TransferControl transferControl;
+
     AutoFactory autoFactory;
 
     /**
@@ -26,13 +29,15 @@ public class Auto {
 
      * @param swerve - the swerve object to be used
      */
-    public Auto(Swerve swerve, IntakeControl intakeControl, ShooterControl shooterControl) {
+    public Auto(Swerve swerve, IntakeControl intakeControl, ShooterControl shooterControl, TransferControl transferControl) {
 
         this.swerve = swerve;
 
         this.intakeControl = intakeControl;
 
         this.shooterControl = shooterControl;
+
+        this.transferControl = transferControl;
 
         autoFactory = new AutoFactory(
 			swerve::getPose,
@@ -41,7 +46,11 @@ public class Auto {
             false, 
             swerve
         ).bind("Intake", intakeControl.slurp)
-        .bind("Shoot", shooterControl.accelerateMotorLimelight);
+        .bind("Shooter", shooterControl.accelerateMotorLimelight)
+        .bind("Belt", transferControl.toggleBelt)
+        .bind("StopShooter", shooterControl.stopMotors)
+        .bind("StopBelt", transferControl.toggleBelt)
+        .bind("StopIntake", intakeControl.stop);
     }
     
     public AutoRoutine hallTest() {

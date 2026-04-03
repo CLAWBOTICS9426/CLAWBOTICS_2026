@@ -86,7 +86,7 @@ public class RobotContainer {
 		hopper = new Hopper();
 		hopperControl = new HopperControl(hopper);
 
-		auto = new Auto(swerve, intakeControl, shooterControl);
+		auto = new Auto(swerve, intakeControl, shooterControl, transferControl);
 
 		autoChooser = new AutoChooser();
 

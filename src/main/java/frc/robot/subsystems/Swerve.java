@@ -195,7 +195,7 @@ public class Swerve extends SubsystemBase {
 
         boolean useMegaTag2 = true; // set to false to use MegaTag1
         boolean doRejectUpdate = false;
-
+        /*
         if (useMegaTag2 == false) {
             LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
 
@@ -236,6 +236,7 @@ public class Swerve extends SubsystemBase {
                         mt2.timestampSeconds);
             }
         }
+         */
 
         field.setRobotPose(currentPose);
 
