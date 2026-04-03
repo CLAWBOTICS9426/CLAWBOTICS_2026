@@ -52,10 +52,10 @@ public final class Constants {
             frontRightDrivePort,
         };
 
-        public static final int frontLeftEncoder = 0;
-        public static final int frontRightEncoder = 3;
-        public static final int backLeftEncoder = 1;
-        public static final int backRightEncoder = 2;
+        public static final int frontLeftEncoder = 5;
+        public static final int frontRightEncoder = 2;
+        public static final int backLeftEncoder = 7;
+        public static final int backRightEncoder = 0;
 
         public static final int[] encoders = {
             frontLeftEncoder,
@@ -65,10 +65,10 @@ public final class Constants {
         };
 
         public static final double[] absoluteOffsets = {
-            38.67, //67
-            76.5,
-            281.67, //67
-            259.3
+            39.0,
+            78.6,
+            281.1, 
+            259.8
         };
 
         public static final double inchesFromRobotCenterWidth = 13.5;
@@ -92,11 +92,11 @@ public final class Constants {
         public static final double swerveD = 0.015;
         public static final double swerveFF = 0.0;
 
-        public static final double xyP = 1.05;
+        public static final double xyP = 0.5;
         public static final double xyI = 0;
-        public static final double xyD = 0;
+        public static final double xyD = 0.01;
 
-        public static final double turnP = 8.192;
+        public static final double turnP = 4.086;
         public static final double turnI = 0.00000;
         public static final double turnD = 0.0016;
         public static final double turnR = 0.02;
@@ -121,7 +121,7 @@ public final class Constants {
 
         public static final double highDriveSpeedFeet = 12.5;
         public static final double highDriveSpeed = Units.feetToMeters(highDriveSpeedFeet);
-        public static final double speedModifier = 0.5;
+        public static final double speedModifier = 1;
 
         public static final double inchesPerRotation = Math.PI * 3.875;
         public static final double metersPerRotation = Units.inchesToMeters(inchesPerRotation);

@@ -28,7 +28,7 @@ public class Vision {
         double distanceRotate = LimelightHelpers.getTX("");
 
         double forward = 0; //maintains radius
-        double strafe = controllerInput.getX() * 3; //constant sideways motion
+        double strafe = controllerInput.getX() * -3; //constant sideways motion
         double rotate = lockOnPID.calculate(distanceRotate, 0); //constant sideways motion
 
         //rotate -= (strafe*0.5);

@@ -74,7 +74,7 @@ public class ShooterControl extends Command{
             lowMotorSpeedAdjustment = 200 * (distanceFromLimelightToGoalFeet - 2);
         }
         System.out.println(distanceFromLimelightToGoalFeet);
-        shooter.accelerateMotors(800, (2900 + lowMotorSpeedAdjustment));
+        shooter.accelerateMotors(800, (2900 + (lowMotorSpeedAdjustment)));
         
     });
 

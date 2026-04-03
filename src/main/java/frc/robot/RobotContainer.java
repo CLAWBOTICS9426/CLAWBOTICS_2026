@@ -53,7 +53,8 @@ public class RobotContainer {
 	Swerve swerve = new Swerve(controller, visionSystem);
 
 	final AutoChooser autoChooser;
-    Auto auto = new Auto(swerve);
+	Auto auto;
+    
 	Intake intake;
 	IntakeControl intakeControl;
 
@@ -71,6 +72,22 @@ public class RobotContainer {
 	 */
 	public RobotContainer() {
 		
+		intake = new Intake();
+		intakeControl = new IntakeControl(intake);
+
+		transfer = new Transfer();
+		transferControl = new TransferControl(transfer);
+
+		shooter = new Shooter();
+		shooterControl = new ShooterControl(shooter);
+
+		SmartDashboard.putData("Shooter", shooter);
+
+		hopper = new Hopper();
+		hopperControl = new HopperControl(hopper);
+
+		auto = new Auto(swerve, intakeControl, shooterControl);
+
 		autoChooser = new AutoChooser();
 
         autoChooser.addRoutine("FromLeft", auto::fromLeft);
@@ -88,19 +105,6 @@ public class RobotContainer {
 
         SmartDashboard.putData("Power Distribution", powerDistribution);
 
-		intake = new Intake();
-		intakeControl = new IntakeControl(intake);
-
-		transfer = new Transfer();
-		transferControl = new TransferControl(transfer);
-
-		shooter = new Shooter();
-		shooterControl = new ShooterControl(shooter);
-
-		SmartDashboard.putData("Shooter", shooter);
-
-		hopper = new Hopper();
-		hopperControl = new HopperControl(hopper);
 
 		SmartDashboard.putData("Hopper", hopper);
 
@@ -155,7 +159,14 @@ public class RobotContainer {
 			.onFalse(shooterControl.stopMotors);
 
 		gamepad2.rightTrigger()
-			.whileTrue(shooterControl.accelerateMotorLimelight)
+			.whileTrue(
+				shooterControl.accelerateMotorLimelight
+				//.andThen(Commands.waitSeconds(.5))
+				//.andThen(transferControl.powerBelt)
+				//.andThen(Commands.waitSeconds(.5))
+				//.andThen(intakeControl.slurp)
+			)
+
 			.onFalse(shooterControl.stopMotors);
 			
 		gamepad2.rightBumper()

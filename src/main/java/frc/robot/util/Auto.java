@@ -5,12 +5,19 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.IntakeControl;
+import frc.robot.commands.ShooterControl;
 import frc.robot.subsystems.Swerve;
+
 
 /** Simple wrapper class to load routines. */
 public class Auto {
     
     Swerve swerve;
+
+    IntakeControl intakeControl;
+
+    ShooterControl shooterControl;
 
     AutoFactory autoFactory;
 
@@ -19,9 +26,13 @@ public class Auto {
 
      * @param swerve - the swerve object to be used
      */
-    public Auto(Swerve swerve) {
+    public Auto(Swerve swerve, IntakeControl intakeControl, ShooterControl shooterControl) {
 
         this.swerve = swerve;
+
+        this.intakeControl = intakeControl;
+
+        this.shooterControl = shooterControl;
 
         autoFactory = new AutoFactory(
 			swerve::getPose,
@@ -29,7 +40,8 @@ public class Auto {
             swerve::followTrajectory, 
             false, 
             swerve
-        );
+        ).bind("Intake", intakeControl.slurp)
+        .bind("Shoot", shooterControl.accelerateMotorLimelight);
     }
     
     public AutoRoutine hallTest() {
@@ -37,7 +49,7 @@ public class Auto {
 
         AutoRoutine hallTest = autoFactory.newRoutine("hallTest");
 
-        AutoTrajectory hallwayTest = hallTest.trajectory("hallwayTest");
+        AutoTrajectory hallwayTest = hallTest.trajectory("FirstRoute");
 
 
         hallTest.active().onTrue(
