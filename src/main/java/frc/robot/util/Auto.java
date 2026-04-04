@@ -53,107 +53,85 @@ public class Auto {
         .bind("StopIntake", intakeControl.stop);
     }
     
-    public AutoRoutine hallTest() {
-        DataLogManager.log("Starting A9uto Routine: hallTest");
+    public AutoRoutine FirstRoute() {
+        DataLogManager.log("Starting Auto Routine: FirstRoute");
 
-        AutoRoutine hallTest = autoFactory.newRoutine("hallTest");
+        AutoRoutine FirstRoute = autoFactory.newRoutine("FirstRoute");
 
-        AutoTrajectory hallwayTest = hallTest.trajectory("FirstRoute");
+        AutoTrajectory firstRoute = FirstRoute.trajectory("FirstRoute");
 
 
-        hallTest.active().onTrue(
+        FirstRoute.active().onTrue(
             Commands.sequence(
-                hallwayTest.resetOdometry(),
-                hallwayTest.cmd()
+                firstRoute.resetOdometry(),
+                firstRoute.cmd()
             )
         );
 
-        return hallTest;
+        return FirstRoute;
     }
 
-    public AutoRoutine fromLeft() {
-        DataLogManager.log("Starting Auto Routine: fromLeft");
+    public AutoRoutine tingLeft() {
+        DataLogManager.log("Starting Auto Routine: tingLeft");
 
-        AutoRoutine fromLeft = autoFactory.newRoutine("fromLeft");
+        AutoRoutine tingLeft = autoFactory.newRoutine("tingLeft");
+        
+        AutoTrajectory Ting1Left = tingLeft.trajectory("Ting1Left");
+        AutoTrajectory Ting2Left = tingLeft.trajectory("Ting2Left");
 
-        AutoTrajectory midFromLeft = fromLeft.trajectory("midFromLeft");
-        AutoTrajectory midToScore = fromLeft.trajectory("midToScore");
-        AutoTrajectory scoreToCoral = fromLeft.trajectory("leftScoreToAlgae");
-        AutoTrajectory alg2 = fromLeft.trajectory("alg2");
-
-        // update current pose of robot to starting point of first trajectory
-        if (midFromLeft.getInitialPose().isEmpty()) {
-            Elastic.sendNotification(new Elastic.Notification(Elastic.Notification.NotificationLevel.WARNING, "Autonomous", "Could not get initial pose from trajectory!"));
-        } else {
-            swerve.setPose(midFromLeft.getInitialPose().get());
-        }
-
-        fromLeft.active().onTrue(
+        tingLeft.active().onTrue(
             Commands.sequence(
-                midFromLeft.resetOdometry(),
-                midFromLeft.cmd()
+                Ting1Left.resetOdometry(),
+                Ting1Left.cmd()
+
             )
         );
 
-        midFromLeft.done().onTrue(midToScore.cmd());
-        midToScore.done().onTrue(scoreToCoral.cmd());
-        scoreToCoral.done().onTrue(alg2.cmd());
+        Ting1Left.done().onTrue(Ting2Left.cmd());
 
-        return fromLeft;
+        return tingLeft;
     }
 
-    public AutoRoutine fromRight() {
-        DataLogManager.log("Starting Auto Routine: fromRight");
+    public AutoRoutine tingRight() {
+        DataLogManager.log("Starting Auto Routine: tingRight");
 
-        AutoRoutine fromRight = autoFactory.newRoutine("fromRight");
+        AutoRoutine tingRight = autoFactory.newRoutine("tingRight");
+        
+        AutoTrajectory Ting1Right = tingRight.trajectory("Ting1Right");
+        AutoTrajectory Ting2Right = tingRight.trajectory("Ting2Right");
 
-        AutoTrajectory midFromRight = fromRight.trajectory("midFromRight");
-        AutoTrajectory midToScore = fromRight.trajectory("midToScore");
-        AutoTrajectory scoreToCoral = fromRight.trajectory("scoreToCoral");
-
-        // update current pose of robot to starting point of first trajectory
-        if (midFromRight.getInitialPose().isEmpty()) {
-            Elastic.sendNotification(new Elastic.Notification(Elastic.Notification.NotificationLevel.WARNING, "Autonomous", "Could not get initial pose from trajectory!"));
-        } else {
-            swerve.setPose(midFromRight.getInitialPose().get());
-        }
-
-        fromRight.active().onTrue(
+        tingRight.active().onTrue(
             Commands.sequence(
-                midFromRight.resetOdometry(),
-                midFromRight.cmd()
+                Ting1Right.resetOdometry(),
+                Ting1Right.cmd()
+
             )
         );
 
-        midFromRight.done().onTrue(midToScore.cmd());
-        midToScore.done().onTrue(scoreToCoral.cmd());
+        Ting1Right.done().onTrue(Ting2Right.cmd());
 
-        return fromRight;
+        return tingRight;
     }
 
-    public AutoRoutine fromMid() {
-        DataLogManager.log("Starting Auto Routine: fromMid");
+    public AutoRoutine MiddleOutOfWay() {
+        DataLogManager.log("Starting Auto Routine: MiddleOutOfWay");
 
-        AutoRoutine fromMid = autoFactory.newRoutine("fromMid");
+        AutoRoutine MiddleOutOfWay = autoFactory.newRoutine("MiddleOutOfWay");
 
-        AutoTrajectory midFromMid = fromMid.trajectory("midFromMid");
-        AutoTrajectory midToScore = fromMid.trajectory("midToScore");
-        AutoTrajectory scoreToCoral = fromMid.trajectory("scoreToCoral");
+        AutoTrajectory MOOW1 = MiddleOutOfWay.trajectory("MOOW1");
+        AutoTrajectory MOOW2 = MiddleOutOfWay.trajectory("MOOW2");
+        AutoTrajectory MOOW3 = MiddleOutOfWay.trajectory("MOOW3");
 
-        // update current pose of robot to starting point of first trajectory
-        if (midFromMid.getInitialPose().isEmpty()) {
-            Elastic.sendNotification(new Elastic.Notification(Elastic.Notification.NotificationLevel.WARNING, "Autonomous", "Could not get initial pose from trajectory!"));
-        } else {
-            swerve.setPose(midFromMid.getInitialPose().get());
-        }
-
-        fromMid.active().onTrue(
+        MiddleOutOfWay.active().onTrue(
             Commands.sequence(
-                midFromMid.resetOdometry(),
-                midFromMid.cmd()
+                MOOW1.resetOdometry(),
+                MOOW1.cmd()
             )
         );
-    
-        return fromMid;
+
+        MOOW1.done().onTrue(MOOW2.cmd());
+        MOOW2.done().onTrue(MOOW3.cmd());
+
+        return MiddleOutOfWay;
     }
 }
