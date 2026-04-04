@@ -65,10 +65,10 @@ public final class Constants {
         };
 
         public static final double[] absoluteOffsets = {
-            39.0,
-            78.6,
-            281.1, 
-            259.8
+            38.8,
+            77.4,
+            277.0, 
+            255.2
         };
 
         public static final double inchesFromRobotCenterWidth = 13.5;
@@ -92,9 +92,9 @@ public final class Constants {
         public static final double swerveD = 0.015;
         public static final double swerveFF = 0.0;
 
-        public static final double xyP = 0.5;
+        public static final double xyP = 5;
         public static final double xyI = 0;
-        public static final double xyD = 0.01;
+        public static final double xyD = 0.1;
 
         public static final double turnP = 4.086;
         public static final double turnI = 0.00000;

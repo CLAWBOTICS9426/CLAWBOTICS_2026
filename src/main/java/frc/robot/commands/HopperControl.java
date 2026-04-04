@@ -7,8 +7,6 @@ import frc.robot.subsystems.Hopper;
 
 public class HopperControl extends Command {
     private Hopper hopper;
-    
-    private boolean toggle = false;
 
     public enum States {
         OPEN,

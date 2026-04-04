@@ -4,13 +4,13 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.IntakeControl;
 import frc.robot.commands.ShooterControl;
 import frc.robot.commands.TransferControl;
 import frc.robot.subsystems.Swerve;
-import frc.robot.util.Vision;
 
 
 /** Simple wrapper class to load routines. */
@@ -27,6 +27,8 @@ public class Auto {
     TransferControl transferControl;
 
     AutoFactory autoFactory;
+        
+    Command shootAfterPath;
 
     /**
      * Constructs a new Auto object with a swerve object to use for path control.
@@ -45,6 +47,19 @@ public class Auto {
 
         this.transferControl = transferControl;
 
+        shootAfterPath =
+            Commands.parallel(
+                Commands.run(() -> {
+                    swerve.swerveDrive(vision.autoTag());
+                }).withTimeout(2),
+                shooterControl.accelerateMotorLimelight.asProxy().withTimeout(10),
+                transferControl.autoToggle.asProxy() // TODO figure out how to make this wait for setpoint
+            ).andThen(
+                Commands.parallel(
+                    shooterControl.stopMotors.asProxy(),
+                    transferControl.autoToggle.asProxy()
+                )
+            );
 
         autoFactory = new AutoFactory(
 			swerve::getPose,
@@ -91,11 +106,11 @@ public class Auto {
         );
 
         Ting1Left.done()
-            .onTrue(shootAfterPath
+            .onTrue(shootAfterPath.asProxy()
             .andThen(Ting2Left.cmd()));
             
         Ting2Left.done()
-            .onTrue(shootAfterPath);
+            .onTrue(shootAfterPath.asProxy());
 
         return tingLeft;
     }
@@ -117,11 +132,11 @@ public class Auto {
         );
 
         Ting1Right.done()
-            .onTrue(shootAfterPath
+            .onTrue(shootAfterPath.asProxy()
             .andThen(Ting2Right.cmd()));
             
         Ting2Right.done()
-            .onTrue(shootAfterPath);
+            .onTrue(shootAfterPath.asProxy());
 
         return tingRight;
     }
@@ -143,30 +158,19 @@ public class Auto {
         );
 
         MOOW1.done()
-            .onTrue(MOOW2.cmd());
+            .onTrue(Commands.waitSeconds(2)
+            .andThen(MOOW2.cmd()));
+        
 
         MOOW2.done()
-            .onTrue(shootAfterPath
+            .onTrue(shootAfterPath.asProxy()
             .andThen(MOOW3.cmd()));
             
         MOOW3.done()
-            .onTrue(shootAfterPath);
+            .onTrue(shootAfterPath.asProxy()
+            .andThen(intakeControl.stop.asProxy()));
+
 
         return MiddleOutOfWay;
     }
-
-
-    public SequentialCommandGroup shootAfterPath =
-        Commands.parallel(
-            Commands.run(() -> {
-                swerve.swerveDrive(vision.autoTag());
-            }).withTimeout(1),
-            shooterControl.accelerateMotorLimelight.withTimeout(6),
-            transferControl.toggleBelt.beforeStarting(Commands.waitSeconds(1)) // TODO figure out how to make this wait for setpoint
-        ).andThen(
-            Commands.parallel(
-                shooterControl.stopMotors,
-                transferControl.toggleBelt
-            )
-        );
 }

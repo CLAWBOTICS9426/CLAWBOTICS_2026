@@ -1,9 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ShooterConstants;
@@ -71,7 +67,7 @@ public class ShooterControl extends Command{
             distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
             distanceFromLimelightToGoalFeet = distanceFromLimelightToGoalInches/12;
 
-            lowMotorSpeedAdjustment = 200 * (distanceFromLimelightToGoalFeet - 2);
+            lowMotorSpeedAdjustment = 200 * (distanceFromLimelightToGoalFeet - 4.5);
         }
         System.out.println(distanceFromLimelightToGoalFeet);
         shooter.accelerateMotors(800, (2900 + (lowMotorSpeedAdjustment)));

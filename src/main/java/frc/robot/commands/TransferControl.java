@@ -31,6 +31,14 @@ public class TransferControl extends Command{
         transfer.powerBelt(toggle ? 1 : 0);
     });
 
+    public Command autoToggle = Commands.sequence(
+        Commands.waitSeconds(1),
+        Commands.runOnce(() -> {
+           toggle = !toggle;
+            transfer.powerBelt(toggle ? 1 : 0); 
+        })
+    );
+
     public Command OscilateBelt =
         Commands.repeatingSequence(
             powerBelt
