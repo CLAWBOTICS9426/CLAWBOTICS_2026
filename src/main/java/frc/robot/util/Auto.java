@@ -5,16 +5,20 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.IntakeControl;
 import frc.robot.commands.ShooterControl;
 import frc.robot.commands.TransferControl;
 import frc.robot.subsystems.Swerve;
+import frc.robot.util.Vision;
 
 
 /** Simple wrapper class to load routines. */
 public class Auto {
     
     Swerve swerve;
+
+    Vision vision;
 
     IntakeControl intakeControl;
 
@@ -29,15 +33,18 @@ public class Auto {
 
      * @param swerve - the swerve object to be used
      */
-    public Auto(Swerve swerve, IntakeControl intakeControl, ShooterControl shooterControl, TransferControl transferControl) {
+    public Auto(Swerve swerve, Vision vision, IntakeControl intakeControl, ShooterControl shooterControl, TransferControl transferControl) {
 
         this.swerve = swerve;
+
+        this.vision = vision;
 
         this.intakeControl = intakeControl;
 
         this.shooterControl = shooterControl;
 
         this.transferControl = transferControl;
+
 
         autoFactory = new AutoFactory(
 			swerve::getPose,
@@ -46,10 +53,6 @@ public class Auto {
             false, 
             swerve
         ).bind("Intake", intakeControl.slurp)
-        .bind("Shooter", shooterControl.accelerateMotorLimelight)
-        .bind("Belt", transferControl.toggleBelt)
-        .bind("StopShooter", shooterControl.stopMotors)
-        .bind("StopBelt", transferControl.toggleBelt)
         .bind("StopIntake", intakeControl.stop);
     }
     
@@ -87,7 +90,12 @@ public class Auto {
             )
         );
 
-        Ting1Left.done().onTrue(Ting2Left.cmd());
+        Ting1Left.done()
+            .onTrue(shootAfterPath
+            .andThen(Ting2Left.cmd()));
+            
+        Ting2Left.done()
+            .onTrue(shootAfterPath);
 
         return tingLeft;
     }
@@ -108,7 +116,12 @@ public class Auto {
             )
         );
 
-        Ting1Right.done().onTrue(Ting2Right.cmd());
+        Ting1Right.done()
+            .onTrue(shootAfterPath
+            .andThen(Ting2Right.cmd()));
+            
+        Ting2Right.done()
+            .onTrue(shootAfterPath);
 
         return tingRight;
     }
@@ -129,9 +142,31 @@ public class Auto {
             )
         );
 
-        MOOW1.done().onTrue(MOOW2.cmd());
-        MOOW2.done().onTrue(MOOW3.cmd());
+        MOOW1.done()
+            .onTrue(MOOW2.cmd());
+
+        MOOW2.done()
+            .onTrue(shootAfterPath
+            .andThen(MOOW3.cmd()));
+            
+        MOOW3.done()
+            .onTrue(shootAfterPath);
 
         return MiddleOutOfWay;
     }
+
+
+    public SequentialCommandGroup shootAfterPath =
+        Commands.parallel(
+            Commands.run(() -> {
+                swerve.swerveDrive(vision.autoTag());
+            }).withTimeout(1),
+            shooterControl.accelerateMotorLimelight.withTimeout(6),
+            transferControl.toggleBelt.beforeStarting(Commands.waitSeconds(1)) // TODO figure out how to make this wait for setpoint
+        ).andThen(
+            Commands.parallel(
+                shooterControl.stopMotors,
+                transferControl.toggleBelt
+            )
+        );
 }

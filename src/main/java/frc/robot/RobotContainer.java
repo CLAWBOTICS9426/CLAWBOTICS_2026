@@ -86,11 +86,10 @@ public class RobotContainer {
 		hopper = new Hopper();
 		hopperControl = new HopperControl(hopper);
 
-		auto = new Auto(swerve, intakeControl, shooterControl, transferControl);
+		auto = new Auto(swerve, visionSystem, intakeControl, shooterControl, transferControl);
 
 		autoChooser = new AutoChooser();
 
-        autoChooser.addRoutine("FirstRoute", auto::FirstRoute);
 		autoChooser.addRoutine("TingLeft", auto::tingLeft);
 		autoChooser.addRoutine("TingRight", auto::tingRight);
 		autoChooser.addRoutine("MOOW", auto::MiddleOutOfWay);
