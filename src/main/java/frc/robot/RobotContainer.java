@@ -88,6 +88,8 @@ public class RobotContainer {
 		autoChooser.addRoutine("TingLeft", auto::tingLeft);
 		autoChooser.addRoutine("TingRight", auto::tingRight);
 		autoChooser.addRoutine("MOOW", auto::MiddleOutOfWay);
+		autoChooser.addRoutine("MooToTingL", auto::MooToTingL);
+		autoChooser.addRoutine("MooToTingR", auto::MooToTingR);
 
         SmartDashboard.putData("Autos", autoChooser);
 

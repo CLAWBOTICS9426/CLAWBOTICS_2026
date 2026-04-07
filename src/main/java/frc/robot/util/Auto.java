@@ -1,5 +1,7 @@
 package frc.robot.util;
 
+import javax.xml.crypto.Data;
+
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
@@ -71,22 +73,79 @@ public class Auto {
         .bind("StopIntake", intakeControl.stop);
     }
     
-    public AutoRoutine FirstRoute() {
-        DataLogManager.log("Starting Auto Routine: FirstRoute");
+    public AutoRoutine hallTest() {
+        DataLogManager.log("Starting Auto Routine: hallTest");
 
-        AutoRoutine FirstRoute = autoFactory.newRoutine("FirstRoute");
+        AutoRoutine hallTest = autoFactory.newRoutine("hallTest");
 
-        AutoTrajectory firstRoute = FirstRoute.trajectory("FirstRoute");
+        AutoTrajectory hallwayTest = hallTest.trajectory("hallwayTest");
 
 
-        FirstRoute.active().onTrue(
+        hallTest.active().onTrue(
             Commands.sequence(
-                firstRoute.resetOdometry(),
-                firstRoute.cmd()
+                hallwayTest.resetOdometry(),
+                hallwayTest.cmd()
             )
         );
 
-        return FirstRoute;
+        return hallTest;
+    }
+
+    public AutoRoutine MooToTingL() {
+        DataLogManager.log("Starting Auto Routine: MooToTingL");
+
+        AutoRoutine MooToTingL = autoFactory.newRoutine("MooToTingL");
+
+        AutoTrajectory MOOW1 = MooToTingL.trajectory("MOOW1");
+        AutoTrajectory MOOW2 = MooToTingL.trajectory("MOOW2");
+        AutoTrajectory Ting2Left = MooToTingL.trajectory("Ting2Left");
+
+        MooToTingL.active().onTrue(
+            Commands.sequence(
+                MOOW1.resetOdometry(),
+                MOOW1.cmd()
+            )
+        );
+
+        MOOW1.done()
+            .onTrue(Commands.waitSeconds(2)
+            .andThen(MOOW2.cmd()));
+
+        MOOW2.done()
+            .onTrue(shootAfterPath
+            .andThen(Ting2Left.cmd()));
+
+        return MooToTingL;
+
+    }
+
+    
+    public AutoRoutine MooToTingR() {
+        DataLogManager.log("Starting Auto Routine: MooToTingR");
+
+        AutoRoutine MooToTingR = autoFactory.newRoutine("MooToTingR");
+
+        AutoTrajectory MOOW1 = MooToTingR.trajectory("MOOW1");
+        AutoTrajectory MOOW2 = MooToTingR.trajectory("MOOW2");
+        AutoTrajectory Ting2Right = MooToTingR.trajectory("Ting2Right");
+
+        MooToTingR.active().onTrue(
+            Commands.sequence(
+                MOOW1.resetOdometry(),
+                MOOW1.cmd()
+            )
+        );
+
+        MOOW1.done()
+            .onTrue(Commands.waitSeconds(2)
+            .andThen(MOOW2.cmd()));
+
+        MOOW2.done()
+            .onTrue(shootAfterPath
+            .andThen(Ting2Right.cmd()));
+
+        return MooToTingR;
+
     }
 
     public AutoRoutine tingLeft() {

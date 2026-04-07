@@ -122,9 +122,13 @@ public class SwerveModule extends SubsystemBase {
             driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 
-        double relativeZero = getAbsolutePosition();
+        double relativeZero;
+        
+        do {
+            relativeZero = getAbsolutePosition();
+        } while (relativeZero == 0 || relativeZero == 360);
 
-        REVLibError error = swerveEncoder.setPosition(relativeZero - DriveConstants.absoluteOffsets[index]);    
+        REVLibError error = swerveEncoder.setPosition((relativeZero - DriveConstants.absoluteOffsets[index]) / 12.8);    
         
         if (error.equals(REVLibError.kOk)) System.out.println("Swerve Module " + index + " is initialized!");
 

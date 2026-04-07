@@ -29,9 +29,9 @@ public final class Constants {
     public static class DriveConstants {
 
         public static final int frontLeftSwervePort = 1;
-        public static final int frontRightSwervePort = 7;
         public static final int backLeftSwervePort = 3;
         public static final int backRightSwervePort = 5;
+        public static final int frontRightSwervePort = 7;
 
         public static final int[] swerveMotorPorts = {
             frontLeftSwervePort,
@@ -41,9 +41,9 @@ public final class Constants {
         };
 
         public static final int frontLeftDrivePort = 2;
-        public static final int frontRightDrivePort = 8;
         public static final int backLeftDrivePort = 4;
         public static final int backRightDrivePort = 6;
+        public static final int frontRightDrivePort = 8;
 
         public static final int[] driveMotorPorts = {
             frontLeftDrivePort,
@@ -52,10 +52,12 @@ public final class Constants {
             frontRightDrivePort,
         };
 
-        public static final int frontLeftEncoder = 5;
-        public static final int frontRightEncoder = 2;
-        public static final int backLeftEncoder = 7;
-        public static final int backRightEncoder = 0;
+        public static final int frontLeftEncoder = 0;
+        public static final int backLeftEncoder = 1;
+        public static final int backRightEncoder = 2;
+        public static final int frontRightEncoder = 3;
+
+
 
         public static final int[] encoders = {
             frontLeftEncoder,
@@ -65,14 +67,14 @@ public final class Constants {
         };
 
         public static final double[] absoluteOffsets = {
-            38.8,
-            77.4,
-            277.0, 
-            255.2
+            37.2,
+            282.0,
+            254.4, 
+            76.7
         };
 
-        public static final double inchesFromRobotCenterWidth = 13.5;
-        public static final double inchesFromRobotCenterHeight = 8;
+        public static final double inchesFromRobotCenterWidth = 7.75; // 13.25
+        public static final double inchesFromRobotCenterHeight = 13.25; // 7.75
         public static final double metersFromRobotCenterWidth = 
             Units.inchesToMeters(inchesFromRobotCenterWidth);
         public static final double metersFromRobotCenterHeight = 
@@ -86,6 +88,7 @@ public final class Constants {
             -metersFromRobotCenterWidth, metersFromRobotCenterHeight);
         public static final Translation2d backRight = new Translation2d(
             -metersFromRobotCenterWidth, -metersFromRobotCenterHeight);
+
 
         public static final double swerveP = 0.032;
         public static final double swerveI = 0.0;
@@ -105,7 +108,7 @@ public final class Constants {
         public static final double driveKv = 3.11;
         public static final double driveKa = 1.05;
 
-        public static final double lockOnP = 0.2;
+        public static final double lockOnP = 0.1;
         public static final double lockOnI = 0.0;
         public static final double lockOnD = 0.00024;
         public static final double lockOnR = 0.02;
@@ -166,8 +169,8 @@ public final class Constants {
 
         public static final double neoFreeSpeedRPM = 5676.0;
 
-        public static final int startingHighSpeed = 800;
-        public static final int startingLowSpeed = 3000;
+        public static final int startingHighSpeed = 5500;
+        public static final int startingLowSpeed = 5500;
     }
 
     public static class HopperConstants {

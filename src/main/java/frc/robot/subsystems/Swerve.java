@@ -45,9 +45,8 @@ public class Swerve extends SubsystemBase {
         DriveConstants.turnP, DriveConstants.turnI, DriveConstants.turnD, DriveConstants.turnR);
 
     private final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(
-        DriveConstants.frontLeft,
-        DriveConstants.backLeft, DriveConstants.backRight, DriveConstants.frontRight
-    );
+        DriveConstants.frontLeft, DriveConstants.frontRight, DriveConstants.backLeft, DriveConstants.backRight
+    )
     
 
     public Vision visionSystem;
@@ -295,14 +294,14 @@ public class Swerve extends SubsystemBase {
         builder.addDoubleProperty("Front Left Angle", () -> getSwerveModuleStates()[0].angle.getDegrees(), null);
         builder.addDoubleProperty("Front Left Velocity", () -> swerveModules[0].currentState.speedMetersPerSecond / 10, null);
 
-        builder.addDoubleProperty("Front Right Angle", () -> swerveModules[1].currentState.angle.getDegrees(), null);
-        builder.addDoubleProperty("Front Right Velocity", () -> swerveModules[1].currentState.speedMetersPerSecond / 10, null);
+        builder.addDoubleProperty("Back Left Angle", () -> swerveModules[1].currentState.angle.getDegrees(), null);
+        builder.addDoubleProperty("Back Left Velocity", () -> swerveModules[1].currentState.speedMetersPerSecond / 10, null);
 
-        builder.addDoubleProperty("Back Left Angle", () -> swerveModules[2].currentState.angle.getDegrees(), null);
-        builder.addDoubleProperty("Back Left Velocity", () -> swerveModules[2].currentState.speedMetersPerSecond / 10, null);
+        builder.addDoubleProperty("Back Right Angle", () -> swerveModules[2].currentState.angle.getDegrees(), null);
+        builder.addDoubleProperty("Back Right Velocity", () -> swerveModules[2].currentState.speedMetersPerSecond / 10, null);
 
-        builder.addDoubleProperty("Back Right Angle", () -> swerveModules[3].currentState.angle.getDegrees(), null);
-        builder.addDoubleProperty("Back Right Velocity", () -> swerveModules[3].currentState.speedMetersPerSecond / 10, null);
+        builder.addDoubleProperty("Front Right Angle", () -> swerveModules[3].currentState.angle.getDegrees(), null);
+        builder.addDoubleProperty("Front Right Velocity", () -> swerveModules[3].currentState.speedMetersPerSecond / 10, null);
 
         builder.addDoubleProperty("Robot Angle", () -> gyroAhrs.getRotation2d().getDegrees(), null);
 
