@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import choreo.trajectory.SwerveSample;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,14 +16,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
 import frc.robot.Constants.DriveConstants;
-<<<<<<< HEAD
-import frc.robot.Constants.VisionConstants;
-=======
->>>>>>> template/master
 import frc.robot.util.ControllerInput;
 import frc.robot.util.ControllerInput.VisionStatus;
 import frc.robot.util.SwerveModule;
+import frc.robot.util.Vision;
 
 /**
  * The physical subsystem that controls the drivetrain.
@@ -30,10 +29,6 @@ import frc.robot.util.SwerveModule;
 public class Swerve extends SubsystemBase {
     private final ControllerInput controllerInput;
 
-<<<<<<< HEAD
-    private final Vision visionSystem; 
-=======
->>>>>>> template/master
     public final AHRS gyroAhrs;
 
     private final SwerveModule[] swerveModules = new SwerveModule[4];
@@ -50,9 +45,11 @@ public class Swerve extends SubsystemBase {
         DriveConstants.turnP, DriveConstants.turnI, DriveConstants.turnD, DriveConstants.turnR);
 
     private final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(
-        DriveConstants.frontLeft, DriveConstants.frontRight,
-        DriveConstants.backLeft, DriveConstants.backRight
+        DriveConstants.frontLeft, DriveConstants.backLeft, DriveConstants.backRight, DriveConstants.frontRight
     );
+    
+
+    public Vision visionSystem;
 
     private double startTime = Timer.getTimestamp();
 
@@ -62,18 +59,10 @@ public class Swerve extends SubsystemBase {
      * @param controller - the controller object that will be used to control the drive system
      * @param visionSystem - the vision system that will be used to control the drivetrain
      */
-<<<<<<< HEAD
     public Swerve(ControllerInput controller, Vision visionSystem) {
 
         // assign constructor variables
         this.controllerInput = controller;
-        this.visionSystem = visionSystem;
-=======
-    public Swerve(ControllerInput controller) {
-
-        // assign constructor variables
-        this.controllerInput = controller;
->>>>>>> template/master
 
         // pose of the swerve is initialized to real values in Auto when auto routine is run
         this.currentPose = new Pose2d();
@@ -102,18 +91,21 @@ public class Swerve extends SubsystemBase {
         );
 
         turnPID.enableContinuousInput(-Math.PI, Math.PI);
+
+        this.visionSystem = visionSystem; 
     }
 
     @Override
     public void periodic() {
-        currentPose = poseEstimator.updateWithTime(
-            startTime - Timer.getTimestamp(), gyroAhrs.getRotation2d(), getSwerveModulePositions());
-
-        field.setRobotPose(currentPose);
+        
+        updateOdometry();
 
         if (!DriverStation.isAutonomousEnabled()) swerveDrive(getDriveSpeeds());
+
+        // clean one liner B)
+        //Sfor (SwerveModule swerveModule : swerveModules) swerveModule.printModuleStatus();
     }
-     
+    
     /**
      * Depending on the vision status, returns either chassis speeds based on controller inputs, or vision tag drive
      * 
@@ -128,44 +120,19 @@ public class Swerve extends SubsystemBase {
             controllerInput.setTurnTarget(gyroAhrs.getRotation2d().getRadians());
         }
 
-<<<<<<< HEAD
-        switch (status) {
-            case LEFT_POSITION: // lines the robot up with the tag
-                speeds = visionSystem.getTagDrive(VisionConstants.cameraPair, VisionConstants.tagIDs, Vision.Side.LEFT, VisionConstants.leftOffset);
-                break;
-            case RIGHT_POSITION: // lines the robot up with the tag
-                speeds = visionSystem.getTagDrive(VisionConstants.cameraPair, VisionConstants.tagIDs, Vision.Side.FRONT, VisionConstants.rightOffset);
-                break;
-            case STRAIGHT_POSITION: // lines the robot up with the tag
-                speeds = visionSystem.getTagDrive(VisionConstants.cameraPair, VisionConstants.tagIDs, Vision.Side.FRONT, VisionConstants.straightOffset);
-                break;
-            case LOCKON: // allows the robot to move freely by user input but remains facing the tag
-                // TODO: lock on with both cameras
-                ChassisSpeeds controllerSpeeds = controllerInput.controllerChassisSpeeds(
-                    turnPID, gyroAhrs.getRotation2d());
-                ChassisSpeeds lockonSpeeds = visionSystem.lockonTagSpeeds(0, null);
-                speeds = new ChassisSpeeds(
-                    controllerSpeeds.vxMetersPerSecond,
-                    controllerSpeeds.vyMetersPerSecond,
-                    lockonSpeeds.omegaRadiansPerSecond
-                );
-                break;
-=======
         // you can parse through different controller inputs here and build
         // ChassisSpeeds objects to perform different actions (with vision)
         switch (status) {
->>>>>>> template/master
+            case LOCKON:
+                if (LimelightHelpers.getTX("") != 0) {
+                    speeds = visionSystem.approachTag(controllerInput);
+                    break; // only break if we have tags to use
+                }
             default: // if all else fails - revert to drive controls
                 speeds = controllerInput.controllerChassisSpeeds(turnPID, gyroAhrs.getRotation2d());
                 break;
         }
 
-<<<<<<< HEAD
-        // this should never execute, but for our peace of mind
-        if (speeds == null) speeds = controllerInput.controllerChassisSpeeds(turnPID, gyroAhrs.getRotation2d());
-
-=======
->>>>>>> template/master
         return speeds;
     }
 
@@ -176,9 +143,9 @@ public class Swerve extends SubsystemBase {
      */
     public void swerveDrive(ChassisSpeeds chassisSpeeds) {
         SwerveModuleState[] moduleState = swerveDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-        boolean rotate = chassisSpeeds.vxMetersPerSecond != 0 
-                        || chassisSpeeds.vyMetersPerSecond != 0 
-                        || chassisSpeeds.omegaRadiansPerSecond != 0;
+        boolean rotate = Math.abs(chassisSpeeds.vxMetersPerSecond) >= 0.05 
+                        || Math.abs(chassisSpeeds.vyMetersPerSecond) >= 0.05   
+                        || Math.abs(chassisSpeeds.omegaRadiansPerSecond) >= 0.05;
 
         SwerveDriveKinematics.desaturateWheelSpeeds(moduleState, DriveConstants.highDriveSpeed);
 
@@ -214,7 +181,62 @@ public class Swerve extends SubsystemBase {
         return swerveModulePositions;
     }
 
+    public void updateOdometry() {
+        currentPose = poseEstimator.updateWithTime(
+            startTime - Timer.getTimestamp(), gyroAhrs.getRotation2d(), getSwerveModulePositions());
 
+        // most of this is pulled from the docs
+        // it *should* perform pose estimation
+
+        boolean useMegaTag2 = true; // set to false to use MegaTag1
+        boolean doRejectUpdate = false;
+        /*
+        if (useMegaTag2 == false) {
+            LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+
+            if (mt1.tagCount == 1 && mt1.rawFiducials.length == 1) {
+                if (mt1.rawFiducials[0].ambiguity > .7) {
+                    doRejectUpdate = true;
+                }
+                if (mt1.rawFiducials[0].distToCamera > 3) {
+                    doRejectUpdate = true;
+                }
+            }
+            if (mt1.tagCount == 0) {
+                doRejectUpdate = true;
+            }
+
+            if (!doRejectUpdate) {
+                poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
+                poseEstimator.addVisionMeasurement(
+                        mt1.pose,
+                        mt1.timestampSeconds);
+            }
+        } else if (useMegaTag2 == true) {
+            LimelightHelpers.SetRobotOrientation("limelight",
+                    poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+            LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+            if (Math.abs(gyroAhrs.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second,
+                                                  // ignore vision updates
+            {
+                doRejectUpdate = true;
+            }
+            if (mt2.tagCount == 0) {
+                doRejectUpdate = true;
+            }
+            if (!doRejectUpdate) {
+                poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
+                poseEstimator.addVisionMeasurement(
+                        mt2.pose,
+                        mt2.timestampSeconds);
+            }
+        }
+         */
+
+        field.setRobotPose(currentPose);
+
+    }
+ 
     private void setupModules() {
         System.out.println("Setting up swerve modules");
 
@@ -272,14 +294,14 @@ public class Swerve extends SubsystemBase {
         builder.addDoubleProperty("Front Left Angle", () -> getSwerveModuleStates()[0].angle.getDegrees(), null);
         builder.addDoubleProperty("Front Left Velocity", () -> swerveModules[0].currentState.speedMetersPerSecond / 10, null);
 
-        builder.addDoubleProperty("Front Right Angle", () -> swerveModules[1].currentState.angle.getDegrees(), null);
-        builder.addDoubleProperty("Front Right Velocity", () -> swerveModules[1].currentState.speedMetersPerSecond / 10, null);
+        builder.addDoubleProperty("Back Left Angle", () -> swerveModules[1].currentState.angle.getDegrees(), null);
+        builder.addDoubleProperty("Back Left Velocity", () -> swerveModules[1].currentState.speedMetersPerSecond / 10, null);
 
-        builder.addDoubleProperty("Back Left Angle", () -> swerveModules[2].currentState.angle.getDegrees(), null);
-        builder.addDoubleProperty("Back Left Velocity", () -> swerveModules[2].currentState.speedMetersPerSecond / 10, null);
+        builder.addDoubleProperty("Back Right Angle", () -> swerveModules[2].currentState.angle.getDegrees(), null);
+        builder.addDoubleProperty("Back Right Velocity", () -> swerveModules[2].currentState.speedMetersPerSecond / 10, null);
 
-        builder.addDoubleProperty("Back Right Angle", () -> swerveModules[3].currentState.angle.getDegrees(), null);
-        builder.addDoubleProperty("Back Right Velocity", () -> swerveModules[3].currentState.speedMetersPerSecond / 10, null);
+        builder.addDoubleProperty("Front Right Angle", () -> swerveModules[3].currentState.angle.getDegrees(), null);
+        builder.addDoubleProperty("Front Right Velocity", () -> swerveModules[3].currentState.speedMetersPerSecond / 10, null);
 
         builder.addDoubleProperty("Robot Angle", () -> gyroAhrs.getRotation2d().getDegrees(), null);
 

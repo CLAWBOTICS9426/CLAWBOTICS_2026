@@ -6,7 +6,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveConstants;
 
@@ -18,21 +17,13 @@ public class ControllerInput extends SubsystemBase {
     /** Enumeration to represent what the robot should be doing with vision. */
     public enum VisionStatus {
         NONE,
-<<<<<<< HEAD
-        LEFT_POSITION,
-        RIGHT_POSITION,
-        STRAIGHT_POSITION,
-        LOCKON,
-        CORAL,
-=======
         LOCKON,
         // add your stuff here
->>>>>>> template/master
     }
 
     private double x, y, theta, slider;
 
-    private double throttle = 0.6;
+    private double throttle = 0.4;
 
     // enables / disables "full throttle" on the drive wheels
     private boolean nos;
@@ -40,19 +31,24 @@ public class ControllerInput extends SubsystemBase {
     private boolean fieldRelative = true;
     private boolean leftBumper;
     private boolean rightBumper;
-    private boolean coral = false;
 
     private VisionStatus visionStatus;
 
     private CommandXboxController controller;
-    private CommandJoystick joystick;
+    private CommandXboxController controller2;
 
     // the angle the robot should try to face
     private double turnTarget = 0;
   
-    public ControllerInput(CommandXboxController controller, CommandJoystick joystick) {
+    /*public ControllerInput(CommandXboxController controller, CommandJoystick joystick) {
         this.controller = controller;
         this.joystick = joystick;
+        this.visionStatus = VisionStatus.NONE;
+    }*/
+
+    public ControllerInput(CommandXboxController controller, CommandXboxController controller2) {
+        this.controller = controller;
+        this.controller2 = controller2;
         this.visionStatus = VisionStatus.NONE;
     }
 
@@ -74,21 +70,9 @@ public class ControllerInput extends SubsystemBase {
         if (Math.abs(theta) < 0.05) {
             theta = 0;
         }
-
-        slider = (joystick.getRawAxis(3) + 1) / 2;
         
-<<<<<<< HEAD
-        if (leftBumper && rightBumper) visionStatus = VisionStatus.STRAIGHT_POSITION;
-        else if (leftBumper) visionStatus = VisionStatus.LEFT_POSITION;
-        else if (rightBumper) visionStatus = VisionStatus.RIGHT_POSITION;
-=======
-        if (leftBumper && rightBumper) visionStatus = VisionStatus.LOCKON;
->>>>>>> template/master
+        if (controller.getLeftTriggerAxis() > 0.5) visionStatus = VisionStatus.LOCKON;
         else visionStatus = VisionStatus.NONE;
-
-        // rightBumper && leftBumper) visionStatus = VisionStatus.STRAIGHT_POSITION;
-        // else if (rightBumper) visionStatus = VisionStatus.RIGHT_POSITION;
-        // else if (leftBumper) visionStatus = VisionStatus.LEFT_POSITION;
     }
 
     public void setTurnTarget(double target) {
@@ -104,6 +88,7 @@ public class ControllerInput extends SubsystemBase {
         double turnSpeed = 0;
 
         if (Math.abs(theta) > 0.05) {
+            //theta *= 0.75;
             turnTarget = currentAngle.getRadians() - (theta * (Math.sqrt(throttle)));
         }
 
@@ -136,12 +121,12 @@ public class ControllerInput extends SubsystemBase {
 
     public Command upShift = Commands.runOnce(() -> {
         if (throttle < 1)
-            throttle += 0.2;
+            throttle += 0.60;
     });
 
     public Command downShift = Commands.runOnce(() -> {
         if (throttle > 0)
-            throttle -= 0.2;
+            throttle -= 0.60;
     });
 
     public Command toggleFeildRelative = Commands.runOnce(() -> {
@@ -156,22 +141,11 @@ public class ControllerInput extends SubsystemBase {
         leftBumper = !leftBumper;
     });
 
-    public Command toggleLockOn = Commands.runOnce(() -> {
-        // lockOn = !lockOn;
-    });
-
-    public Command a = Commands.runOnce(() -> {
-        coral = !coral;
-    });
-
 
     public boolean nos() {return nos;}
     public double throttle() {return throttle;}
     public VisionStatus visionStatus() {return visionStatus;}
 
+    public double getX() {return x;}
     public double slider() {return slider;}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> template/master

@@ -82,7 +82,7 @@ public class SwerveModule extends SubsystemBase {
 
         // configure the swerve motor
         swerveConfig
-            .inverted(true)
+            .inverted(false)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(15);
 
@@ -104,9 +104,9 @@ public class SwerveModule extends SubsystemBase {
 
         // configure the drive motor
         driveConfig
-            .inverted(true)
-            .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(30);
+            .inverted(false)
+            .idleMode(IdleMode.kCoast)
+            .smartCurrentLimit(35);
 
         driveConfig.encoder
             .positionConversionFactor(DriveConstants.driveMotorToWheel)
@@ -122,7 +122,12 @@ public class SwerveModule extends SubsystemBase {
             driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 
-        double relativeZero = getAbsolutePosition();
+        double relativeZero;
+        
+        do {
+            relativeZero = getAbsolutePosition();
+        } while (relativeZero == 0 || relativeZero == 360);
+
 
         REVLibError error = swerveEncoder.setPosition(relativeZero - DriveConstants.absoluteOffsets[index]);    
         
@@ -251,7 +256,7 @@ public class SwerveModule extends SubsystemBase {
             * moduleState.speedMetersPerSecond
             * DriveConstants.speedModifier
             * throttle
-            * (nos ? DriveConstants.nosBooster : 1)
+            //* (nos ? DriveConstants.nosBooster : 1)
         );
     }
     
@@ -268,7 +273,10 @@ public class SwerveModule extends SubsystemBase {
             : (velocity - lastMotorSpeed) / (time - lastMotorSetTime);
 
         double ffv = DriveConstants.driveFeedForward[index].calculate(velocity);
+        //driveMotor.setVoltage(ffv);
         driveMotor.setVoltage(ffv);
+
+
         lastMotorSpeed = velocity;
         lastMotorSetTime = time;
     }

@@ -9,17 +9,21 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.IntakeControl;
+import frc.robot.commands.ShooterControl;
+import frc.robot.commands.TransferControl;
+import frc.robot.commands.HopperControl;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
-<<<<<<< HEAD
-import frc.robot.subsystems.Vision;
-=======
->>>>>>> template/master
+import frc.robot.subsystems.Transfer;
+import frc.robot.subsystems.Hopper;
 import frc.robot.util.Auto;
 import frc.robot.util.ControllerInput;
+import frc.robot.util.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -32,47 +36,73 @@ import frc.robot.util.ControllerInput;
  */
 public class RobotContainer {
 
-	CommandJoystick joystick = new CommandJoystick(OperatorConstants.operatorControllerPort);
-	CommandXboxController xboxController = new CommandXboxController(OperatorConstants.driverControllerPort);
+	CommandXboxController gamepad2 = new CommandXboxController(OperatorConstants.operatorControllerPort);
+	CommandXboxController gamepad = new CommandXboxController(OperatorConstants.driverControllerPort);
 
-	PowerDistribution powerDistribution = new PowerDistribution(16, ModuleType.kRev);
+	PowerDistribution powerDistribution = new PowerDistribution(20, ModuleType.kRev);
 
-	ControllerInput controller = new ControllerInput(xboxController, joystick);
-<<<<<<< HEAD
-	Vision visionSystem = new Vision(
-        Constants.VisionConstants.ipAddress, 
-        Constants.VisionConstants.CameraRotations, 
-        null); 
+	ControllerInput controller = new ControllerInput(gamepad, gamepad2);
+
+    Vision visionSystem = new Vision();
 
 	Swerve swerve = new Swerve(controller, visionSystem);
-=======
-
-	Swerve swerve = new Swerve(controller);
->>>>>>> template/master
 
 	final AutoChooser autoChooser;
-    Auto auto = new Auto(swerve);
+	Auto auto;
+    
+	Intake intake;
+	IntakeControl intakeControl;
+
+	Transfer transfer;
+	TransferControl transferControl;
+
+	Shooter shooter;
+	ShooterControl shooterControl;
+
+	Hopper hopper;
+	HopperControl hopperControl;
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
 		
+		intake = new Intake();
+		intakeControl = new IntakeControl(intake);
+
+		transfer = new Transfer();
+		transferControl = new TransferControl(transfer);
+
+		shooter = new Shooter();
+		shooterControl = new ShooterControl(shooter);
+
+		SmartDashboard.putData("Shooter", shooter);
+
+		hopper = new Hopper();
+		hopperControl = new HopperControl(hopper);
+
+		auto = new Auto(swerve, visionSystem, intakeControl, shooterControl, transferControl);
+
 		autoChooser = new AutoChooser();
 
-        autoChooser.addRoutine("FromLeft", auto::fromLeft);
-        autoChooser.addRoutine("FromMid", auto::fromMid);
-        autoChooser.addRoutine("FromRight", auto::fromRight);
+		autoChooser.addRoutine("TingLeft", auto::tingLeft);
+		autoChooser.addRoutine("TingRight", auto::tingRight);
+		autoChooser.addRoutine("MOOW", auto::MiddleOutOfWay);
+		autoChooser.addRoutine("MooToTingL", auto::MooToTingL);
+		autoChooser.addRoutine("MooToTingR", auto::MooToTingR);
 
         SmartDashboard.putData("Autos", autoChooser);
 
-        autoChooser.select("FromMid");
+        autoChooser.select("FirstRoute");
 
         SmartDashboard.putData("Swerve", swerve);
         SmartDashboard.putData("Field", swerve.field);
         SmartDashboard.putData("Gyro", swerve.gyroAhrs);
 
         SmartDashboard.putData("Power Distribution", powerDistribution);
+
+
+		SmartDashboard.putData("Hopper", hopper);
 
 		// Configure the trigger bindings
 		configureBindings();
@@ -95,26 +125,67 @@ public class RobotContainer {
 	private void configureBindings() {
 
 		// driver bindings 
-        xboxController.start()
+        gamepad.start()
             .onChange(controller.toggleNos);
 
-        xboxController.leftTrigger(0.75)
-            .onChange(controller.toggleFeildRelative);
+		gamepad.rightTrigger() 
+			.onFalse(controller.downShift)
+			.onTrue(controller.upShift);
 
-        xboxController.rightBumper()
-            .onTrue(controller.upShift);
-        
-        xboxController.leftBumper()
-            .onTrue(controller.downShift);
+		gamepad2.a()
+			.onTrue(intakeControl.slurp)
+			.onFalse(intakeControl.stop);
+		gamepad2.b()
+			.onTrue(intakeControl.burp)
+			.onFalse(intakeControl.stop);
+			
+		gamepad2.y()
+			.onTrue(hopperControl.openHopper);
+			//.onTrue(hopperControl.powerHopper)
+			//.onFalse(hopperControl.stopHopper);
 
-        xboxController.b()
-            .onChange(controller.toggleRightBumper);
-        
-        xboxController.x()
-            .onChange(controller.toggleLeftBumper);
-        
-        xboxController.a()
-            .onChange(controller.a);
+		gamepad2.x()
+			.onTrue(hopperControl.closeHopper);
+			//.onTrue(hopperControl.negativeHopper)
+			//.onFalse(hopperControl.stopHopper);
+
+		// manipulator bindings
+		gamepad2.leftTrigger()
+			.whileTrue(shooterControl.accelerateMotorsHardValues)
+			.onFalse(shooterControl.stopMotors);
+
+		gamepad2.rightTrigger()
+			.whileTrue(
+				shooterControl.accelerateMotorLimelight
+				//.andThen(Commands.waitSeconds(.5))
+				//.andThen(transferControl.powerBelt)
+				//.andThen(Commands.waitSeconds(.5))
+				//.andThen(intakeControl.slurp)
+			)
+
+			.onFalse(shooterControl.stopMotors);
+			
+		gamepad2.rightBumper()
+			.onTrue(transferControl.OscilateBelt);
+		// 	.onTrue(transferControl.powerBelt
+		// 		.andThen(Commands.waitSeconds(.5))
+		// 		.andThen(transferControl.negativeBelt));	
+
+		gamepad2.start()
+			.onTrue(transferControl.toggleBelt);
+
+		
+		gamepad2.povLeft()
+			.onTrue(shooterControl.decreaseLowMotorSpeed);
+
+		gamepad2.povRight()
+			.onTrue(shooterControl.increaseLowMotorSpeed);
+
+		gamepad2.povUp()
+			.onTrue(shooterControl.increaseHighMotorSpeed);
+
+		gamepad2.povDown()
+			.onTrue(shooterControl.decreaseHighMotorSpeed);
 
 	}
 
