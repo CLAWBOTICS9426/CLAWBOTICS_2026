@@ -45,8 +45,8 @@ public class Swerve extends SubsystemBase {
         DriveConstants.turnP, DriveConstants.turnI, DriveConstants.turnD, DriveConstants.turnR);
 
     private final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(
-        DriveConstants.frontLeft, DriveConstants.frontRight, DriveConstants.backLeft, DriveConstants.backRight
-    )
+        DriveConstants.frontLeft, DriveConstants.backLeft, DriveConstants.backRight, DriveConstants.frontRight
+    );
     
 
     public Vision visionSystem;
@@ -103,7 +103,7 @@ public class Swerve extends SubsystemBase {
         if (!DriverStation.isAutonomousEnabled()) swerveDrive(getDriveSpeeds());
 
         // clean one liner B)
-        //for (SwerveModule swerveModule : swerveModules) swerveModule.printModuleStatus();
+        //Sfor (SwerveModule swerveModule : swerveModules) swerveModule.printModuleStatus();
     }
     
     /**
@@ -143,9 +143,9 @@ public class Swerve extends SubsystemBase {
      */
     public void swerveDrive(ChassisSpeeds chassisSpeeds) {
         SwerveModuleState[] moduleState = swerveDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-        boolean rotate = chassisSpeeds.vxMetersPerSecond != 0 
-                        || chassisSpeeds.vyMetersPerSecond != 0 
-                        || chassisSpeeds.omegaRadiansPerSecond != 0;
+        boolean rotate = Math.abs(chassisSpeeds.vxMetersPerSecond) >= 0.05 
+                        || Math.abs(chassisSpeeds.vyMetersPerSecond) >= 0.05   
+                        || Math.abs(chassisSpeeds.omegaRadiansPerSecond) >= 0.05;
 
         SwerveDriveKinematics.desaturateWheelSpeeds(moduleState, DriveConstants.highDriveSpeed);
 

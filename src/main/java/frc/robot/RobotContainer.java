@@ -129,8 +129,8 @@ public class RobotContainer {
             .onChange(controller.toggleNos);
 
 		gamepad.rightTrigger() 
-			.onTrue(controller.downShift)
-			.onFalse(controller.upShift);
+			.onFalse(controller.downShift)
+			.onTrue(controller.upShift);
 
 		gamepad2.a()
 			.onTrue(intakeControl.slurp)

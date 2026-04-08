@@ -53,9 +53,9 @@ public final class Constants {
         };
 
         public static final int frontLeftEncoder = 0;
-        public static final int backLeftEncoder = 1;
-        public static final int backRightEncoder = 2;
-        public static final int frontRightEncoder = 3;
+        public static final int backLeftEncoder = 3;
+        public static final int backRightEncoder = 1;
+        public static final int frontRightEncoder = 2;
 
 
 
@@ -68,9 +68,9 @@ public final class Constants {
 
         public static final double[] absoluteOffsets = {
             37.2,
-            282.0,
-            254.4, 
-            76.7
+            76.7, // 282.0
+            282.0, // 254.4
+            254.4 // 76.7
         };
 
         public static final double inchesFromRobotCenterWidth = 7.75; // 13.25
@@ -99,7 +99,7 @@ public final class Constants {
         public static final double xyI = 0;
         public static final double xyD = 0.1;
 
-        public static final double turnP = 8.192;
+        public static final double turnP = 4.069;
         public static final double turnI = 0.00000;
         public static final double turnD = 0.0016;
         public static final double turnR = 0.02;

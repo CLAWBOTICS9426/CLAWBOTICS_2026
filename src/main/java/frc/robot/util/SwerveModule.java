@@ -105,7 +105,7 @@ public class SwerveModule extends SubsystemBase {
         // configure the drive motor
         driveConfig
             .inverted(false)
-            .idleMode(IdleMode.kBrake)
+            .idleMode(IdleMode.kCoast)
             .smartCurrentLimit(35);
 
         driveConfig.encoder
@@ -128,7 +128,8 @@ public class SwerveModule extends SubsystemBase {
             relativeZero = getAbsolutePosition();
         } while (relativeZero == 0 || relativeZero == 360);
 
-        REVLibError error = swerveEncoder.setPosition((relativeZero - DriveConstants.absoluteOffsets[index]) / 12.8);    
+
+        REVLibError error = swerveEncoder.setPosition(relativeZero - DriveConstants.absoluteOffsets[index]);    
         
         if (error.equals(REVLibError.kOk)) System.out.println("Swerve Module " + index + " is initialized!");
 
