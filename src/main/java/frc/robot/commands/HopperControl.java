@@ -59,17 +59,17 @@ public class HopperControl extends Command {
         }
     }
 
-    public Command powerHopper = Commands.runOnce(() -> {
-        hopper.expand(HopperConstants.hopperSpeed);
-    });
+    // public Command powerHopper = Commands.runOnce(() -> {
+    //     hopper.expand(HopperConstants.hopperSpeed);
+    // });
 
-    public Command negativeHopper = Commands.runOnce(() -> {
-        hopper.retract(HopperConstants.hopperSpeed);
-    });
+    // public Command negativeHopper = Commands.runOnce(() -> {
+    //     hopper.retract(HopperConstants.hopperSpeed);
+    // });
 
-    public Command stopHopper = Commands.runOnce(() -> {
-        hopper.expand(0);
-    });
+    // public Command stopHopper = Commands.runOnce(() -> {
+    //     hopper.expand(0);
+    // });
 
     public Command openHopper = Commands.runOnce(() -> {
         state = States.OPEN;

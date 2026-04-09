@@ -104,7 +104,7 @@ public class Swerve extends SubsystemBase {
         if (!DriverStation.isAutonomousEnabled()) swerveDrive(getDriveSpeeds());
 
         // clean one liner B)
-        //Sfor (SwerveModule swerveModule : swerveModules) swerveModule.printModuleStatus();
+        //for (SwerveModule swerveModule : swerveModules) swerveModule.printModuleStatus();
     }
     
     /**
@@ -144,9 +144,9 @@ public class Swerve extends SubsystemBase {
      */
     public void swerveDrive(ChassisSpeeds chassisSpeeds) {
         SwerveModuleState[] moduleState = swerveDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-        boolean rotate = Math.abs(chassisSpeeds.vxMetersPerSecond) >= 0.05 
-                        || Math.abs(chassisSpeeds.vyMetersPerSecond) >= 0.05   
-                        || Math.abs(chassisSpeeds.omegaRadiansPerSecond) >= 0.05;
+        boolean rotate = Math.abs(chassisSpeeds.vxMetersPerSecond) >= 0.1 
+                        || Math.abs(chassisSpeeds.vyMetersPerSecond) >= 0.1   
+                        || Math.abs(chassisSpeeds.omegaRadiansPerSecond) >= 0.1;
 
         SwerveDriveKinematics.desaturateWheelSpeeds(moduleState, DriveConstants.highDriveSpeed);
 

@@ -24,7 +24,7 @@ public class Hopper extends SubsystemBase{
 
         config.inverted(true) // Adj ust if necessary
             .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(15);
+            .smartCurrentLimit(25);
 
       hopperMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }

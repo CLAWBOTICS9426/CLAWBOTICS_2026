@@ -96,24 +96,22 @@ public class Auto {
 
         AutoRoutine MooToTingL = autoFactory.newRoutine("MooToTingL");
 
-        AutoTrajectory MOOW1 = MooToTingL.trajectory("MOOW1");
-        AutoTrajectory MOOW2 = MooToTingL.trajectory("MOOW2");
+        AutoTrajectory MOOW3Right = MooToTingL.trajectory("MOOW3Right");
         AutoTrajectory Ting2Left = MooToTingL.trajectory("Ting2Left");
 
         MooToTingL.active().onTrue(
             Commands.sequence(
-                MOOW1.resetOdometry(),
-                MOOW1.cmd()
+                MOOW3Right.resetOdometry(),
+                MOOW3Right.cmd()
             )
         );
 
-        MOOW1.done()
-            .onTrue(Commands.waitSeconds(2)
-            .andThen(MOOW2.cmd()));
-
-        MOOW2.done()
+        MOOW3Right.done()
             .onTrue(shootAfterPath
-            .andThen(Ting2Left.cmd()));
+            .andThen(MooToTingL.cmd()));
+
+        Ting2Left.done()
+            .onTrue(shootAfterPath);
 
         return MooToTingL;
 

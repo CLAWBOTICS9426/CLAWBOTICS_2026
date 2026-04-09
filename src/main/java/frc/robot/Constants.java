@@ -52,9 +52,9 @@ public final class Constants {
             frontRightDrivePort,
         };
 
-        public static final int frontLeftEncoder = 0;
+        public static final int frontLeftEncoder = 1;
         public static final int backLeftEncoder = 3;
-        public static final int backRightEncoder = 1;
+        public static final int backRightEncoder = 0;
         public static final int frontRightEncoder = 2;
 
 
@@ -69,7 +69,7 @@ public final class Constants {
         public static final double[] absoluteOffsets = {
             37.2,
             76.7, // 282.0
-            282.0, // 254.4
+            280.0, // 254.4
             254.4 // 76.7
         };
 
@@ -176,7 +176,7 @@ public final class Constants {
     public static class HopperConstants {
         public static int hopperMotorPort = 13;
 
-        public static double hopperSpeed = 0.5;
+        public static double hopperSpeed = 1;
 
         public static double extendedPos = 1.8;
     }

@@ -15,6 +15,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -122,12 +123,7 @@ public class SwerveModule extends SubsystemBase {
             driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 
-        double relativeZero;
-        
-        do {
-            relativeZero = getAbsolutePosition();
-        } while (relativeZero == 0 || relativeZero == 360);
-
+        double relativeZero = getAbsolutePosition();
 
         REVLibError error = swerveEncoder.setPosition(relativeZero - DriveConstants.absoluteOffsets[index]);    
         
@@ -255,7 +251,7 @@ public class SwerveModule extends SubsystemBase {
             absoluteTarget.multiplier
             * moduleState.speedMetersPerSecond
             * DriveConstants.speedModifier
-            * throttle
+            * (DriverStation.isAutonomousEnabled() ? 1 : throttle)
             //* (nos ? DriveConstants.nosBooster : 1)
         );
     }
