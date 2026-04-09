@@ -124,6 +124,7 @@ public class RobotContainer {
 	 */
 	private void configureBindings() {
 
+		/*
 		// driver bindings 
         gamepad.start()
             .onChange(controller.toggleNos);
@@ -186,7 +187,7 @@ public class RobotContainer {
 
 		gamepad2.povDown()
 			.onTrue(shooterControl.decreaseHighMotorSpeed);
-
+		*/
 	}
 
 	/**

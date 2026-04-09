@@ -4,6 +4,7 @@ import choreo.trajectory.SwerveSample;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -190,7 +191,7 @@ public class Swerve extends SubsystemBase {
 
         boolean useMegaTag2 = true; // set to false to use MegaTag1
         boolean doRejectUpdate = false;
-        /*
+
         if (useMegaTag2 == false) {
             LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
 
@@ -231,7 +232,6 @@ public class Swerve extends SubsystemBase {
                         mt2.timestampSeconds);
             }
         }
-         */
 
         field.setRobotPose(currentPose);
 

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Shooter;
+import frc.robot.util.Vision;
 
 public class ShooterControl extends Command{
     private Shooter shooter;
@@ -23,7 +24,9 @@ public class ShooterControl extends Command{
     // distance from the target to the floor
     double goalHeightInches = 52.0; 
 
-    double angleToGoalDegrees; //should add angle of limelight, but it is flat on wall
+    double limelightAngle = 35;
+    
+    double angleToGoalDegrees; // + limelightAngle; should add angle of limelight, but it is flat on wall
     double angleToGoalRadians;
 
     //calculate distance
@@ -60,18 +63,27 @@ public class ShooterControl extends Command{
 
     public Command accelerateMotorLimelight = Commands.run(() -> {
 
-        angleToGoalDegrees = LimelightHelpers.getTY("");
-        if (angleToGoalDegrees != 0) { 
-            angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
-            
-            distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
-            distanceFromLimelightToGoalFeet = distanceFromLimelightToGoalInches/12;
+        LimelightHelpers.LimelightResults results = LimelightHelpers.getLatestResults("");
+        LimelightHelpers.LimelightTarget_Fiducial[] tags = results.targets_Fiducials;
 
-            lowMotorSpeedAdjustment = 200 * (distanceFromLimelightToGoalFeet - 4.5);
+        for (LimelightHelpers.LimelightTarget_Fiducial tag : tags) {
+
+            int id = (int) tag.fiducialID;
+            if (!Vision.tagIDs.contains(id)) continue;
+
+            angleToGoalDegrees = tag.ty;
+            if (angleToGoalDegrees != 0) { 
+                angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
+                
+                distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
+                distanceFromLimelightToGoalFeet = distanceFromLimelightToGoalInches/12;
+
+                lowMotorSpeedAdjustment = 200 * (distanceFromLimelightToGoalFeet - 4.5);
+            }
+
+            shooter.accelerateMotors(800, (2900 + (lowMotorSpeedAdjustment)));
+            break;
         }
-        System.out.println(distanceFromLimelightToGoalFeet);
-        shooter.accelerateMotors(800, (2900 + (lowMotorSpeedAdjustment)));
-        
     });
 
     public Command stopMotors = Commands.runOnce(() -> {
