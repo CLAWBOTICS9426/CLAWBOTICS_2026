@@ -32,11 +32,11 @@ public class TransferControl extends Command{
     });
 
     public Command autoToggle = Commands.sequence(
-        Commands.waitSeconds(1),
+        Commands.waitSeconds(2).asProxy(),
         Commands.runOnce(() -> {
            toggle = !toggle;
             transfer.powerBelt(toggle ? 1 : 0); 
-        })
+        }).beforeStarting(Commands.waitSeconds(2))
     );
 
     public Command OscilateBelt =

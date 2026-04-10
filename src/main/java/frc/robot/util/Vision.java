@@ -42,19 +42,16 @@ public class Vision {
 
     public ChassisSpeeds approachTag(ControllerInput controllerInput) {
 
-        LimelightHelpers.LimelightResults results = LimelightHelpers.getLatestResults("");
-        LimelightHelpers.LimelightTarget_Fiducial[] tags = results.targets_Fiducials;
-
         ChassisSpeeds visionSpeeds = new ChassisSpeeds();
 
-        for (LimelightHelpers.LimelightTarget_Fiducial tag : tags) {
+        //for (LimelightHelpers.LimelightTarget_Fiducial tag : tags) {
 
-            int id = (int) tag.fiducialID;
-            if (!tagIDs.contains(id)) continue;
+            //int id = (int) tag.fiducialID;
+            //if (!tagIDs.contains(id)) continue;
 
             double desiredRadius = 1.5; //meters from tag
-            double distanceError = tag.ta - desiredRadius;
-            double distanceRotate = tag.tx;
+            double distanceError = LimelightHelpers.getTA("") - desiredRadius;//tag.ta - desiredRadius;
+            double distanceRotate = LimelightHelpers.getTX("");//tag.tx;
 
             double forward = 0; //maintains radius
             double strafe = controllerInput.getX() * -3; //constant sideways motion
@@ -68,8 +65,8 @@ public class Vision {
                     strafe,
                     rotate
             );
-            break;
-        }
+            //break;
+        //}
 
        
 

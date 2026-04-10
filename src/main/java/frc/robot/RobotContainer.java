@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -153,18 +154,21 @@ public class RobotContainer {
 		// manipulator bindings
 		gamepad2.leftTrigger()
 			.whileTrue(shooterControl.accelerateMotorsHardValues)
+			.onTrue(transferControl.autoToggle)
+			.onTrue(intakeControl.slurp)
+			.onFalse(transferControl.toggleBelt)
+			.onFalse(intakeControl.stop)
 			.onFalse(shooterControl.stopMotors);
 
 		gamepad2.rightTrigger()
 			.whileTrue(
 				shooterControl.accelerateMotorLimelight
-				//.andThen(Commands.waitSeconds(.5))
-				//.andThen(transferControl.powerBelt)
-				//.andThen(Commands.waitSeconds(.5))
-				//.andThen(intakeControl.slurp)
 			)
-
-			.onFalse(shooterControl.stopMotors);
+			.onTrue(transferControl.autoToggle)
+			.onTrue(intakeControl.slurp)
+			.onFalse(transferControl.toggleBelt)
+			.onFalse(shooterControl.stopMotors)
+			.onFalse(intakeControl.stop);
 			
 		gamepad2.rightBumper()
 			.onTrue(transferControl.OscilateBelt);

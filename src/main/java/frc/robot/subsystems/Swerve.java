@@ -146,7 +146,7 @@ public class Swerve extends SubsystemBase {
         SwerveModuleState[] moduleState = swerveDriveKinematics.toSwerveModuleStates(chassisSpeeds);
         boolean rotate = Math.abs(chassisSpeeds.vxMetersPerSecond) >= 0.1 
                         || Math.abs(chassisSpeeds.vyMetersPerSecond) >= 0.1   
-                        || Math.abs(chassisSpeeds.omegaRadiansPerSecond) >= 0.1;
+                        || Math.abs(chassisSpeeds.omegaRadiansPerSecond) >= 0.2;
 
         SwerveDriveKinematics.desaturateWheelSpeeds(moduleState, DriveConstants.highDriveSpeed);
 

@@ -63,15 +63,7 @@ public class ShooterControl extends Command{
 
     public Command accelerateMotorLimelight = Commands.run(() -> {
 
-        LimelightHelpers.LimelightResults results = LimelightHelpers.getLatestResults("");
-        LimelightHelpers.LimelightTarget_Fiducial[] tags = results.targets_Fiducials;
-
-        for (LimelightHelpers.LimelightTarget_Fiducial tag : tags) {
-
-            int id = (int) tag.fiducialID;
-            if (!Vision.tagIDs.contains(id)) continue;
-
-            angleToGoalDegrees = tag.ty;
+            angleToGoalDegrees = LimelightHelpers.getTY("");
             if (angleToGoalDegrees != 0) { 
                 angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
                 
@@ -82,9 +74,8 @@ public class ShooterControl extends Command{
             }
 
             shooter.accelerateMotors(800, (2900 + (lowMotorSpeedAdjustment)));
-            break;
         }
-    });
+    );
 
     public Command stopMotors = Commands.runOnce(() -> {
         shooter.stop();

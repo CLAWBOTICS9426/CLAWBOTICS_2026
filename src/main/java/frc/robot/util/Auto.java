@@ -54,12 +54,12 @@ public class Auto {
                 Commands.run(() -> {
                     swerve.swerveDrive(vision.autoTag());
                 }).withTimeout(2),
-                shooterControl.accelerateMotorLimelight.asProxy().withTimeout(10),
+                shooterControl.accelerateMotorLimelight.asProxy().repeatedly().withTimeout(10),
                 transferControl.autoToggle.asProxy() // TODO figure out how to make this wait for setpoint
             ).andThen(
                 Commands.parallel(
                     shooterControl.stopMotors.asProxy(),
-                    transferControl.autoToggle.asProxy()
+                    transferControl.toggleBelt.asProxy()
                 )
             );
 
